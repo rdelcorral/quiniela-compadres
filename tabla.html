@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla de Posiciones · Quiniela Compadres</title>
+<meta property="og:title" content="Tabla de Posiciones · Quiniela Compadres 🏆">
+<meta property="og:description" content="¿Quién va ganando la quiniela del Mundial 2026?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#081024;--card:#11224a;--green:#2bd97c;--gold:#ffd54f;--red:#ff5a6e;--txt:#eef3ff;--mut:#8fa3cc;--line:#22386e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(1200px 600px at 50% -100px,#16306b 0%,var(--bg) 60%);color:var(--txt);min-height:100vh;padding-bottom:40px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+.hero{text-align:center;padding:34px 16px 8px}
+.cup{font-size:44px;animation:bounce 2.2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(34px,9vw,50px);letter-spacing:2px;line-height:.95;margin-top:6px}
+h1 .gold{color:var(--gold)}
+.sub{color:var(--mut);font-size:13px;margin-top:6px}
+.status{display:flex;justify-content:center;gap:8px;margin:14px 0 4px;flex-wrap:wrap}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:12px;color:var(--mut)}
+.chip b{color:var(--green)}
+.board{margin-top:18px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:8px}
+.rowmain{display:flex;align-items:center;gap:12px;cursor:pointer}
+.row.open{border-color:rgba(43,217,124,.4)}
+.chev{flex:none;color:var(--mut);font-size:13px;transition:transform .2s;margin-left:2px}
+.row.open .chev{transform:rotate(180deg);color:var(--green)}
+.breakdown{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:10px;flex-direction:column;gap:7px}
+.row.open .breakdown{display:flex}
+.bd{display:flex;align-items:center;gap:9px}
+.bd .ic{flex:none;font-size:13px}
+.bdtext{flex:1;min-width:0}
+.bdl{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bds{font-size:11px;color:var(--mut);margin-top:1px}
+.bd.miss .bdl,.bd.miss .bds{color:var(--mut)}
+.bd.miss .bdl{font-weight:400}
+.bd .pp{flex:none;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green)}
+.bd.miss .pp{color:#3f527e;font-size:14px}
+.bdempty{font-size:12px;color:var(--mut);font-style:italic}
+.row .pos{font-family:'Bebas Neue',sans-serif;font-size:22px;width:34px;text-align:center;color:var(--mut);flex:none}
+.row.p1{border-color:rgba(255,213,79,.6);box-shadow:0 0 14px rgba(255,213,79,.12)}
+.row.p1 .pos{color:var(--gold)}
+.row.p2 .pos{color:#cfd8ea}
+.row.p3 .pos{color:#e0a36b}
+.row .nm{flex:1;font-weight:600;font-size:14.5px;text-transform:capitalize}
+.row .det{font-size:11px;color:var(--mut);margin-top:2px;font-weight:400}
+.row .pts{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--green)}
+.row .pts small{font-size:11px;color:var(--mut);font-family:'Inter',sans-serif;display:block;text-align:right}
+.medal{font-size:18px;flex:none}
+.empty,.error{text-align:center;color:var(--mut);padding:50px 20px;font-size:14px}
+.error{color:var(--red)}
+.results{margin-top:26px}
+.results h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px;margin-bottom:10px}
+.rsub{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.5px;margin:14px 0 8px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12px}
+.rcard .m{color:var(--mut);font-size:11px}
+.rcard .r{font-weight:700;margin-top:3px}
+.rcard .r.pend{color:var(--mut);font-weight:400;font-style:italic}
+.foot{text-align:center;color:#4a5d8c;font-size:11px;margin-top:30px}
+.foot a{color:var(--mut)}
+.refresh{margin:12px auto 0;display:block;background:linear-gradient(135deg,var(--green),#18b765);color:#04230f;border:none;border-radius:12px;padding:11px 22px;font-size:14px;font-weight:800;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 6px 18px rgba(43,217,124,.3);transition:.15s}
+.refresh:active{transform:scale(.97)}
+.refresh:disabled{opacity:.55;cursor:default;box-shadow:none}
+.updated{text-align:center;color:var(--mut);font-size:11px;margin-top:7px;min-height:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="cup">🏆</div>
+    <h1>TABLA DE <span class="gold">POSICIONES</span></h1>
+    <div class="sub">Quiniela Compadres · Mundial 2026</div>
+    <div class="status">
+      <span class="chip">👥 <b id="nplayers">–</b> participantes</span>
+      <span class="chip">⚽ <b id="nres">–</b> de <b id="ntot">–</b> resultados</span>
+    </div>
+    <button id="refreshbtn" class="refresh">🔄 Actualizar</button>
+    <div class="updated" id="updated"></div>
+  </div>
+  <div class="board" id="board"><div class="empty">Cargando pronósticos… ⏳</div></div>
+  <div class="results">
+    <h2>📋 RESULTADOS CAPTURADOS</h2>
+    <div class="rsub">🥇 Ronda 1 · Fase de grupos</div>
+    <div class="rgrid" id="rgrid"></div>
+    <div class="rsub">🔥 Ronda 2 · Jornada 2</div>
+    <div class="rgrid" id="rgrid2"></div>
+  </div>
+  <div class="foot">Suma Ronda 1 + Ronda 2 · se actualiza al abrir la página.<br><a href="/ronda2">🔥 Jugar la Ronda 2</a> · <a href="/">← Volver a la quiniela</a></div>
+</div>
+
+<script>
+var NL = String.fromCharCode(10), CR = String.fromCharCode(13), QT = String.fromCharCode(34);
+var CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJiRyqtpewXzjdV-yqhogZcbmEvBlv8_Oho4zrbLzEZtFYMZvPf83fps3g-B8gJv2jAEd9P96GEvOr/pub?output=csv";
+
+var RESULTS = {
+  "¿Quién ganará el partido inaugural?": "Mexico",
+  "Corea del Sur vs Chequia": "Corea del Sur",
+  "Canadá vs Bosnia y Herzegovina": "Empate",
+  "Estados Unidos vs Paraguay": "Estados Unidos",
+  "Qatar vs Suiza": "Empate",
+  "Brasil vs Marruecos": "Empate",
+  "Haití vs Escocia": "Escocia",
+  "Australia vs Turquía": "Australia",
+  "Alemania vs Curazao": "Alemania",
+  "Países Bajos vs Japón": "Países Bajos",
+  "Costa de Marfil vs Ecuador": null,
+  "Túnez vs Suecia": null,
+  "¿Habrá una tarjeta roja en los primeros 4 días?": "Si",
+  "¿Qué selección tendrá la mejor participación de CONCACAF?": null,
+  "¿Cúal será el campeón del Mundial 2026?": null,
+  "¿Cuál será el subcampeón del Mundial 2026?": null,
+  "¿Quién será el máximo goleador del Mundial?": null,
+  "¿Qué selección será la sorpresa del Mundial?": null
+};
+var SCORES = {
+  "¿Quién ganará el partido inaugural?":"2-0",
+  "Corea del Sur vs Chequia":"2-1",
+  "Canadá vs Bosnia y Herzegovina":"1-1",
+  "Estados Unidos vs Paraguay":"4-1",
+  "Qatar vs Suiza":"1-1",
+  "Brasil vs Marruecos":"1-1",
+  "Haití vs Escocia":"0-1",
+  "Australia vs Turquía":"2-0",
+  "Alemania vs Curazao":"7-1",
+  "Países Bajos vs Japón":"2-1"
+};
+var PTS = {
+  "¿Quién ganará el partido inaugural?":3,
+  "Corea del Sur vs Chequia":3,"Canadá vs Bosnia y Herzegovina":3,"Estados Unidos vs Paraguay":3,
+  "Qatar vs Suiza":3,"Brasil vs Marruecos":3,"Haití vs Escocia":3,"Australia vs Turquía":3,"Alemania vs Curazao":3,
+  "Países Bajos vs Japón":3,"Costa de Marfil vs Ecuador":3,"Túnez vs Suecia":3,
+  "¿Habrá una tarjeta roja en los primeros 4 días?":3,
+  "¿Qué selección tendrá la mejor participación de CONCACAF?":3,
+  "¿Cúal será el campeón del Mundial 2026?":20,
+  "¿Cuál será el subcampeón del Mundial 2026?":10,
+  "¿Quién será el máximo goleador del Mundial?":10,
+  "¿Qué selección será la sorpresa del Mundial?":5
+};
+var SHORT = {
+  "¿Quién ganará el partido inaugural?":"🏟️ México vs Sudáfrica",
+  "¿Habrá una tarjeta roja en los primeros 4 días?":"🟥 Tarjeta roja (4 días)",
+  "¿Qué selección tendrá la mejor participación de CONCACAF?":"🌎 Mejor CONCACAF",
+  "¿Cúal será el campeón del Mundial 2026?":"🏆 Campeón",
+  "¿Cuál será el subcampeón del Mundial 2026?":"🥈 Subcampeón",
+  "¿Quién será el máximo goleador del Mundial?":"👟 Goleador",
+  "¿Qué selección será la sorpresa del Mundial?":"😱 Sorpresa"
+};
+var NICE = {"Mexico":"México","Sudafrica":"Sudáfrica","Chequa":"Chequia","Si":"Sí","No":"No"};
+var GOLEADOR_KEY = "¿Quién será el máximo goleador del Mundial?";
+
+// ===== RONDA 2 (Jornada 2 de grupos) =====
+var CSV_URL_R2 = "https://docs.google.com/spreadsheets/d/1lvNjjSdaNMRkORnnoIcr27oMZkz369gmyAdxTSvaaa4/gviz/tq?tqx=out:csv";
+var RESULTS_R2 = {
+  "Mexico vs Corea del Sur": null,
+  "Canada vs Catar": null,
+  "Brasil vs Haiti": null,
+  "Estados Unidos vs Australia": null,
+  "Alemania vs Costa de Marfil": null,
+  "Paises Bajos vs Suecia": null,
+  "Belgica vs Iran": null,
+  "Espana vs Arabia Saudita": null,
+  "Francia vs Irak": null,
+  "Argentina vs Austria": null,
+  "Portugal vs Uzbekistan": null,
+  "Inglaterra vs Ghana": null,
+  "Habra una goleada (3+ goles de diferencia) en la jornada 2?": null
+};
+var SCORES_R2 = {};
+var PTS_R2 = {
+  "Mexico vs Corea del Sur":3,"Canada vs Catar":3,"Brasil vs Haiti":3,"Estados Unidos vs Australia":3,
+  "Alemania vs Costa de Marfil":3,"Paises Bajos vs Suecia":3,"Belgica vs Iran":3,"Espana vs Arabia Saudita":3,
+  "Francia vs Irak":3,"Argentina vs Austria":3,"Portugal vs Uzbekistan":3,"Inglaterra vs Ghana":3,
+  "Habra una goleada (3+ goles de diferencia) en la jornada 2?":3
+};
+var SHORT_R2 = {
+  "Mexico vs Corea del Sur":"⚽ México vs Corea","Canada vs Catar":"⚽ Canadá vs Catar","Brasil vs Haiti":"⚽ Brasil vs Haití",
+  "Estados Unidos vs Australia":"⚽ USA vs Australia","Alemania vs Costa de Marfil":"⚽ Alemania vs C. Marfil",
+  "Paises Bajos vs Suecia":"⚽ P. Bajos vs Suecia","Belgica vs Iran":"⚽ Bélgica vs Irán","Espana vs Arabia Saudita":"⚽ España vs Arabia",
+  "Francia vs Irak":"⚽ Francia vs Irak","Argentina vs Austria":"⚽ Argentina vs Austria","Portugal vs Uzbekistan":"⚽ Portugal vs Uzbekistán",
+  "Inglaterra vs Ghana":"⚽ Inglaterra vs Ghana","Habra una goleada (3+ goles de diferencia) en la jornada 2?":"💥 Goleada en J2"
+};
+var NICE_R2 = {"Mexico":"México","Haiti":"Haití","Canada":"Canadá","Paises Bajos":"Países Bajos","Belgica":"Bélgica","Iran":"Irán","Espana":"España","Uzbekistan":"Uzbekistán","Si":"Sí","No":"No"};
+
+function parseCSV(text){
+  var rows=[], row=[], cell="", q=false, i, c;
+  for(i=0;i<text.length;i++){
+    c=text[i];
+    if(q){ if(c==QT){ if(text[i+1]==QT){cell+=QT;i++;} else q=false; } else cell+=c; }
+    else if(c==QT) q=true;
+    else if(c==","){ row.push(cell); cell=""; }
+    else if(c==NL||c==CR){ if(c==CR&&text[i+1]==NL)i++; row.push(cell); cell="";
+      if(row.join("").trim()!=="") rows.push(row); row=[]; }
+    else cell+=c;
+  }
+  if(cell!==""||row.length){ row.push(cell); if(row.join("").trim()!=="") rows.push(row); }
+  return rows;
+}
+function norm(s){ return (s||"").trim().toLowerCase(); }
+
+function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES){
+  var out={map:{}, captured:Object.keys(RES).filter(function(k){return RES[k]!==null;}), total:Object.keys(RES).length};
+  if(!rows || !rows.length) return out;
+  var headers = rows[0].map(function(h){return h.trim();});
+  var idxName = -1;
+  headers.forEach(function(h,i){ if(norm(h)==="nombre completo") idxName=i; });
+  if(idxName<0) return out;
+  rows.slice(1).forEach(function(r){
+    var name=(r[idxName]||"").trim();
+    if(!name || norm(name).indexOf("prueba")>=0) return;
+    var pts=0, hits=0, detail=[];
+    out.captured.forEach(function(key){
+      var i=headers.indexOf(key);
+      var pickRaw = i>=0 ? (r[i]||"").trim() : "";
+      var ans=norm(pickRaw), res=norm(RES[key]), ok;
+      if(key===GOLEADOR_KEY){ ok = ans!=="" && (ans.indexOf(res)>=0 || res.indexOf(ans)>=0); }
+      else { ok = (ans===res); }
+      var earned = ok ? PTS[key] : 0;
+      if(ok){ pts+=earned; hits++; }
+      detail.push({
+        label: SHORT[key] || ("⚽ "+key),
+        res: ((NICE&&NICE[RES[key]])||RES[key]) + (SCORES[key] ? " "+SCORES[key] : ""),
+        pick: pickRaw ? ((NICE&&NICE[pickRaw])||pickRaw) : "—",
+        ok: ok, pts: earned
+      });
+    });
+    out.map[norm(name)] = {name:name, pts:pts, hits:hits, detail:detail};
+  });
+  return out;
+}
+function getCSV(url){
+  return fetch(url+(url.indexOf('?')>=0?'&':'?')+"t="+Date.now())
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
+    .then(function(t){ return parseCSV(t); });
+}
+function renderResults(RES, SCORES, SHORT, NICE, gridId){
+  var rhtml="";
+  Object.keys(RES).forEach(function(k){
+    var v=RES[k];
+    var disp = v===null ? "Pendiente…" : ((NICE&&NICE[v])||v) + (SCORES[k] ? " "+SCORES[k] : "");
+    rhtml += '<div class="rcard"><div class="m">'+(SHORT[k]||"⚽ "+k)+'</div>'
+      + '<div class="r '+(v===null?"pend":"")+'">'+disp+'</div></div>';
+  });
+  document.getElementById(gridId).innerHTML = rhtml;
+}
+function main(){
+  Promise.all([
+    getCSV(CSV_URL).catch(function(){return null;}),
+    getCSV(CSV_URL_R2).catch(function(){return null;})
+  ]).then(function(res){
+    var rows1=res[0], rows2=res[1];
+    if(!rows1 && !rows2) throw new Error("sin datos");
+    var r1 = scoreRound(rows1, RESULTS, PTS, SHORT, NICE, SCORES);
+    var r2 = scoreRound(rows2, RESULTS_R2, PTS_R2, SHORT_R2, NICE_R2, SCORES_R2);
+    var names={};
+    Object.keys(r1.map).forEach(function(k){names[k]=1;});
+    Object.keys(r2.map).forEach(function(k){names[k]=1;});
+    var players = Object.keys(names).map(function(k){
+      var a=r1.map[k], b=r2.map[k];
+      return {name:(a&&a.name)||(b&&b.name), pts:(a?a.pts:0)+(b?b.pts:0), hits:(a?a.hits:0)+(b?b.hits:0),
+              detail:(a?a.detail:[]).concat(b?b.detail:[])};
+    }).sort(function(a,b){ return b.pts-a.pts || a.name.localeCompare(b.name,"es"); });
+
+    var totalCaptured = r1.captured.length + r2.captured.length;
+    var totalQ = r1.total + r2.total;
+    document.getElementById("nplayers").textContent=players.length;
+    document.getElementById("nres").textContent=totalCaptured;
+    document.getElementById("ntot").textContent=totalQ;
+
+    var medals=["🥇","🥈","🥉"], lastPts=null, lastRank=0, html="";
+    players.forEach(function(p,i){
+      var rank = (p.pts===lastPts)? lastRank : i+1;
+      lastPts=p.pts; lastRank=rank;
+      var bd = (p.detail||[]).map(function(d){
+        return '<div class="bd '+(d.ok?"":"miss")+'">'
+          + '<span class="ic">'+(d.ok?"✅":"❌")+'</span>'
+          + '<div class="bdtext"><div class="bdl">'+d.label+'</div>'
+          + '<div class="bds">'+d.res+' · tú: '+d.pick+'</div></div>'
+          + '<span class="pp">'+(d.ok?("+"+d.pts):"0")+'</span></div>';
+      }).join('');
+      if(!bd) bd='<div class="bdempty">Aún no hay resultados capturados.</div>';
+      html += '<div class="row p'+rank+'">'
+        + '<div class="rowmain">'
+        + '<div class="pos">'+rank+'</div>'
+        + '<div class="nm">'+p.name+'<div class="det">'+p.hits+' acierto'+(p.hits===1?"":"s")+' de '+totalCaptured+' resultados · ver desglose</div></div>'
+        + (rank<=3 && p.pts>0 ? '<div class="medal">'+medals[rank-1]+'</div>' : '')
+        + '<div class="pts">'+p.pts+'<small>pts</small></div>'
+        + '<span class="chev">▾</span>'
+        + '</div>'
+        + '<div class="breakdown">'+bd+'</div>'
+        + '</div>';
+    });
+    document.getElementById("board").innerHTML = html || '<div class="empty">Aún no hay pronósticos registrados.</div>';
+
+    renderResults(RESULTS, SCORES, SHORT, NICE, "rgrid");
+    renderResults(RESULTS_R2, SCORES_R2, SHORT_R2, NICE_R2, "rgrid2");
+
+    setBusy(false);
+    var now = new Date();
+    document.getElementById("updated").textContent =
+      "Actualizado a las " + String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0");
+  }).catch(function(e){
+    document.getElementById("board").innerHTML='<div class="error">No pude cargar las respuestas. Recarga la página en unos segundos.</div>';
+    setBusy(false);
+    document.getElementById("updated").textContent = "No se pudo actualizar. Intenta de nuevo.";
+  });
+}
+function setBusy(on){
+  var b=document.getElementById("refreshbtn");
+  b.disabled=on;
+  b.textContent = on ? "⏳ Actualizando…" : "🔄 Actualizar";
+}
+document.getElementById("refreshbtn").addEventListener("click", function(){
+  setBusy(true);
+  main();
+});
+document.getElementById("board").addEventListener("click", function(e){
+  var row = e.target.closest(".row");
+  if(row && document.getElementById("board").contains(row)) row.classList.toggle("open");
+});
+main();
+</script>
+</body>
+</html>
