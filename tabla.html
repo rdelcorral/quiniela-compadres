@@ -78,8 +78,6 @@ h1 .gold{color:var(--gold)}
       <span class="chip">👥 <b id="nplayers">–</b> participantes</span>
       <span class="chip">⚽ <b id="nres">–</b> de <b id="ntot">–</b> resultados</span>
     </div>
-    <button id="refreshbtn" class="refresh">🔄 Actualizar</button>
-    <div class="updated" id="updated"></div>
   </div>
   <div class="board" id="board"><div class="empty">Cargando pronósticos… ⏳</div></div>
   <div class="results">
@@ -107,7 +105,7 @@ var RESULTS = {
   "Australia vs Turquía": "Australia",
   "Alemania vs Curazao": "Alemania",
   "Países Bajos vs Japón": "Países Bajos",
-  "Costa de Marfil vs Ecuador": null,
+  "Costa de Marfil vs Ecuador": "Costa de Marfil",
   "Túnez vs Suecia": null,
   "¿Habrá una tarjeta roja en los primeros 4 días?": "Si",
   "¿Qué selección tendrá la mejor participación de CONCACAF?": null,
@@ -126,7 +124,8 @@ var SCORES = {
   "Haití vs Escocia":"0-1",
   "Australia vs Turquía":"2-0",
   "Alemania vs Curazao":"7-1",
-  "Países Bajos vs Japón":"2-1"
+  "Países Bajos vs Japón":"2-1",
+  "Costa de Marfil vs Ecuador":"1-0"
 };
 var PTS = {
   "¿Quién ganará el partido inaugural?":3,
@@ -297,26 +296,10 @@ function main(){
 
     renderResults(RESULTS, SCORES, SHORT, NICE, "rgrid");
     renderResults(RESULTS_R2, SCORES_R2, SHORT_R2, NICE_R2, "rgrid2");
-
-    setBusy(false);
-    var now = new Date();
-    document.getElementById("updated").textContent =
-      "Actualizado a las " + String(now.getHours()).padStart(2,"0") + ":" + String(now.getMinutes()).padStart(2,"0");
   }).catch(function(e){
     document.getElementById("board").innerHTML='<div class="error">No pude cargar las respuestas. Recarga la página en unos segundos.</div>';
-    setBusy(false);
-    document.getElementById("updated").textContent = "No se pudo actualizar. Intenta de nuevo.";
   });
 }
-function setBusy(on){
-  var b=document.getElementById("refreshbtn");
-  b.disabled=on;
-  b.textContent = on ? "⏳ Actualizando…" : "🔄 Actualizar";
-}
-document.getElementById("refreshbtn").addEventListener("click", function(){
-  setBusy(true);
-  main();
-});
 document.getElementById("board").addEventListener("click", function(e){
   var row = e.target.closest(".row");
   if(row && document.getElementById("board").contains(row)) row.classList.toggle("open");
