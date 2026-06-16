@@ -231,7 +231,29 @@ function parseCSV(text){
   if(cell!==""||row.length){ row.push(cell); if(row.join("").trim()!=="") rows.push(row); }
   return rows;
 }
-function norm(s){ return (s||"").trim().toLowerCase(); }
+function stripAccents(s){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function norm(s){ return stripAccents((s||"").trim().toLowerCase()).replace(/\s+/g," "); }
+
+// Mismas personas que escribieron su nombre distinto entre la Ronda 1 y la Ronda 2.
+// Clave: cualquier variante (se compara sin acentos ni mayúsculas). Valor: nombre que se mostrará.
+// Agrega aquí nuevas equivalencias conforme las detectes.
+var NAME_FIX = {
+  "sebastian": "Sebastian Madero",
+  "sebastian madero": "Sebastian Madero",
+  "pau martinez": "AnaPau Martinez",
+  "anapau martinez": "AnaPau Martinez"
+};
+function canonName(name){ var n=norm(name); return NAME_FIX[n] || (name||"").trim(); }
+function canonKey(name){ return norm(canonName(name)); }
+
+// Muestra el resultado de un partido como "Local x-y Visitante" (en vez de "Ganador x-y", que se leía al revés).
+function fmtResult(key, val, SCORES, NICE){
+  if(val===null) return "Pendiente…";
+  var sc = SCORES && SCORES[key];
+  var parts = key.split(" vs ");
+  if(parts.length===2 && sc && /^[0-9]+-[0-9]+$/.test(sc)) return parts[0]+" "+sc+" "+parts[1];
+  return ((NICE&&NICE[val])||val) + (sc ? " "+sc : "");
+}
 
 function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES){
   var out={map:{}, captured:Object.keys(RES).filter(function(k){return RES[k]!==null;}), total:Object.keys(RES).length};
@@ -254,12 +276,13 @@ function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES){
       if(ok){ pts+=earned; hits++; }
       detail.push({
         label: SHORT[key] || ("⚽ "+key),
-        res: ((NICE&&NICE[RES[key]])||RES[key]) + (SCORES[key] ? " "+SCORES[key] : ""),
+        res: fmtResult(key, RES[key], SCORES, NICE),
         pick: pickRaw ? ((NICE&&NICE[pickRaw])||pickRaw) : "—",
         ok: ok, pts: earned
       });
     });
-    out.map[norm(name)] = {name:name, pts:pts, hits:hits, detail:detail};
+    var ckey = canonKey(name);
+    out.map[ckey] = {name:canonName(name), pts:pts, hits:hits, detail:detail};
   });
   return out;
 }
@@ -272,7 +295,7 @@ function renderResults(RES, SCORES, SHORT, NICE, gridId){
   var rhtml="";
   Object.keys(RES).forEach(function(k){
     var v=RES[k];
-    var disp = v===null ? "Pendiente…" : ((NICE&&NICE[v])||v) + (SCORES[k] ? " "+SCORES[k] : "");
+    var disp = fmtResult(k, v, SCORES, NICE);
     rhtml += '<div class="rcard"><div class="m">'+(SHORT[k]||"⚽ "+k)+'</div>'
       + '<div class="r '+(v===null?"pend":"")+'">'+disp+'</div></div>';
   });
