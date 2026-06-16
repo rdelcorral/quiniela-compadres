@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ronda 2 Complemento · Quiniela Compadres · Mundial 2026</title>
+<meta property="og:title" content="Quiniela Compadres · RONDA 2 Complemento 🏆">
+<meta property="og:description" content="Los otros 12 partidos de la jornada 2. ¡Completa tu Ronda 2!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#081024;--bg2:#0d1b3a;--card:#11224a;--card2:#16295a;--green:#2bd97c;--gold:#ffd54f;--red:#ff5a6e;--txt:#eef3ff;--mut:#8fa3cc;--line:#22386e}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',system-ui,sans-serif;background:radial-gradient(1200px 600px at 50% -100px,#16306b 0%,var(--bg) 60%);color:var(--txt);min-height:100vh;padding-bottom:110px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+.hero{text-align:center;padding:34px 16px 10px}
+.ball{font-size:44px;line-height:1;animation:bounce 2.2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,11vw,58px);letter-spacing:2px;line-height:.95;margin-top:6px}
+h1 .gold{color:var(--gold)}
+.sub{color:var(--mut);font-size:14px;margin-top:6px}
+.r2tag{display:inline-block;margin-top:10px;background:rgba(43,217,124,.12);border:1px solid var(--green);color:var(--green);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:700;letter-spacing:1px}
+.count{margin:18px auto 0;background:linear-gradient(135deg,#142a5e,#0d1b3a);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.count .lbl{font-size:11px;letter-spacing:2px;color:var(--mut);text-transform:uppercase}
+.timer{display:flex;justify-content:center;gap:10px;margin-top:8px}
+.tbox{min-width:62px}
+.tnum{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--green);background:#0a1736;border:1px solid var(--line);border-radius:10px;padding:4px 0}
+.tlab{font-size:10px;color:var(--mut);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+.closed{color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px}
+.inaug{margin-top:10px;font-size:13px;color:var(--mut)}
+.sec{margin-top:26px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sec-h .ico{font-size:22px}
+.sec-h h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px}
+.sec-h .pts{margin-left:auto;font-size:11px;color:var(--gold);background:rgba(255,213,79,.1);border:1px solid rgba(255,213,79,.35);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.q{font-weight:600;font-size:15px;margin-bottom:10px}
+.q .req{color:var(--red)}
+input[type=text]{width:100%;background:#0a1736;border:1px solid var(--line);border-radius:12px;color:var(--txt);font-size:16px;padding:13px 14px;font-family:'Inter',sans-serif;appearance:none}
+input:focus{outline:2px solid var(--green);border-color:var(--green)}
+.match{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px}
+.mgrp{font-size:11px;color:var(--mut);text-align:center;margin-bottom:8px;letter-spacing:1px}
+.mteams{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mteam{display:flex;flex-direction:column;align-items:center;gap:6px;width:40%}
+.mteam img{width:46px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.mteam span{font-size:12.5px;font-weight:600;text-align:center;line-height:1.2}
+.vs{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--mut)}
+.mbtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.mbtn{background:#0a1736;border:1.5px solid var(--line);border-radius:10px;padding:10px 4px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;color:var(--txt);text-align:center}
+.mbtn.sel{border-color:var(--green);background:rgba(43,217,124,.14);box-shadow:0 0 0 1px var(--green)}
+.mbtn .e{display:block;font-size:15px;margin-bottom:2px}
+.bar{position:fixed;bottom:0;left:0;right:0;background:rgba(8,16,36,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 16px 18px;z-index:50}
+.bar .in{max-width:560px;margin:0 auto}
+.prog{height:6px;background:#0a1736;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.prog i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:99px;transition:.3s}
+.bar .row{display:flex;align-items:center;gap:12px}
+.bar .st{font-size:12px;color:var(--mut);flex:1}
+.send{background:linear-gradient(135deg,var(--green),#18b765);color:#04230f;border:none;border-radius:12px;padding:14px 26px;font-size:15px;font-weight:800;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(43,217,124,.35)}
+.send:disabled{opacity:.45;box-shadow:none}
+.success{display:none;text-align:center;padding:60px 20px}
+.success .cup{font-size:80px;animation:bounce 2s infinite}
+.success h2{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:2px;margin:12px 0 6px;color:var(--gold)}
+.success p{color:var(--mut);font-size:14px;max-width:380px;margin:0 auto 22px}
+.wa{display:inline-flex;align-items:center;gap:10px;background:#25d366;color:#06281a;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:14px;font-size:15px}
+.tablink{display:block;margin-top:18px;color:var(--mut);font-size:13px}
+.recap{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:26px auto 0;max-width:420px;font-size:13px;line-height:1.9;color:var(--mut);white-space:pre-wrap}
+.err{display:none;color:var(--red);font-size:13px;text-align:center;margin-top:8px}
+.foot{text-align:center;color:#4a5d8c;font-size:11px;margin-top:40px}
+.foot a{color:var(--mut)}
+</style>
+</head>
+<body>
+<div id="formview">
+<div class="wrap">
+  <div class="hero">
+    <div class="ball">⚽</div>
+    <h1>QUINIELA <span class="gold">COMPADRES</span></h1>
+    <div class="sub">Mundial 2026 · Que gane el que más le sabe 🍻</div>
+    <div class="r2tag">🔥 RONDA 2 · COMPLEMENTO (LOS OTROS 12)</div>
+    <div class="count">
+      <div class="lbl">⏳ Cierra en</div>
+      <div class="timer" id="timer">
+        <div class="tbox"><div class="tnum" id="td">--</div><div class="tlab">Días</div></div>
+        <div class="tbox"><div class="tnum" id="th">--</div><div class="tlab">Horas</div></div>
+        <div class="tbox"><div class="tnum" id="tm">--</div><div class="tlab">Min</div></div>
+      </div>
+      <div class="inaug">🗓️ Son los otros partidos de la jornada 2 (18–23 de junio)</div>
+    </div>
+  </div>
+
+  <div id="qform"></div>
+
+  <div class="foot">Quiniela del Corral · Ronda 2 Complemento 🏆<br>Tus respuestas se registran automáticamente.</div>
+</div>
+</div>
+
+<div class="success wrap" id="successview">
+  <div class="cup">🏆</div>
+  <h2>¡COMPLEMENTO REGISTRADO!</h2>
+  <p>Ya quedaron tus 12 pronósticos del complemento. Manda tu resumen al grupo 👇</p>
+  <a class="wa" id="walink" target="_blank" rel="noopener">📲 Compartir por WhatsApp</a>
+  <a class="tablink" href="/tabla">📊 Ver la tabla de posiciones →</a>
+  <div class="recap" id="recap"></div>
+</div>
+
+<div class="bar" id="bar">
+  <div class="in">
+    <div class="prog"><i id="progfill"></i></div>
+    <div class="row">
+      <div class="st" id="progtxt">0 de 13 respuestas</div>
+      <button class="send" id="sendbtn" disabled>Enviar 🚀</button>
+    </div>
+    <div class="err" id="errmsg"></div>
+  </div>
+</div>
+
+<script>
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScZQUYXD6NcWQ4vnvHl2KBHN6utoHmSdlv1esUyzPyT3fAnKg/formResponse";
+const DEADLINE = new Date("2026-06-18T16:00:00Z");
+
+const FLAG = {cz:"cz",za:"za",ch:"ch",ba:"ba",sct:"gb-sct",ma:"ma",tr:"tr",py:"py",ec:"ec",cw:"cw",tn:"tn",jp:"jp",nz:"nz",eg:"eg",uy:"uy",cv:"cv",no:"no",sn:"sn",jo:"jo",dz:"dz",co:"co",cd:"cd",pa:"pa",hr:"hr"};
+function flag(code){return '<img src="https://flagcdn.com/w80/'+FLAG[code]+'.png" alt="" loading="lazy">';}
+function emoji(code){var c=FLAG[code]; if(c==="gb-sct")return "🏴󠁧󠁢󠁳󠁣󠁴󠁿"; return String.fromCodePoint(...[...c.toUpperCase()].map(ch=>0x1F1A5+ch.charCodeAt(0)));}
+
+const E_NOMBRE = "464843842";
+// cada partido: entry, grupo, equipo A (display/value/flag), equipo B
+const MATCHES = [
+ {e:"377716200",  g:"Grupo A", a:{d:"Chequia",v:"Chequia",f:"cz"},          b:{d:"Sudáfrica",v:"Sudafrica",f:"za"}},
+ {e:"1084598509", g:"Grupo B", a:{d:"Suiza",v:"Suiza",f:"ch"},              b:{d:"Bosnia y Herzegovina",v:"Bosnia y Herzegovina",f:"ba"}},
+ {e:"556779224",  g:"Grupo C", a:{d:"Escocia",v:"Escocia",f:"sct"},         b:{d:"Marruecos",v:"Marruecos",f:"ma"}},
+ {e:"545957136",  g:"Grupo D", a:{d:"Turquía",v:"Turquia",f:"tr"},          b:{d:"Paraguay",v:"Paraguay",f:"py"}},
+ {e:"758540474",  g:"Grupo E", a:{d:"Ecuador",v:"Ecuador",f:"ec"},          b:{d:"Curazao",v:"Curazao",f:"cw"}},
+ {e:"1950570961", g:"Grupo F", a:{d:"Túnez",v:"Tunez",f:"tn"},              b:{d:"Japón",v:"Japon",f:"jp"}},
+ {e:"582096440",  g:"Grupo G", a:{d:"Nueva Zelanda",v:"Nueva Zelanda",f:"nz"}, b:{d:"Egipto",v:"Egipto",f:"eg"}},
+ {e:"1228758325", g:"Grupo H", a:{d:"Uruguay",v:"Uruguay",f:"uy"},          b:{d:"Cabo Verde",v:"Cabo Verde",f:"cv"}},
+ {e:"1461958707", g:"Grupo I", a:{d:"Noruega",v:"Noruega",f:"no"},          b:{d:"Senegal",v:"Senegal",f:"sn"}},
+ {e:"1596450550", g:"Grupo J", a:{d:"Jordania",v:"Jordania",f:"jo"},        b:{d:"Argelia",v:"Argelia",f:"dz"}},
+ {e:"1089911924", g:"Grupo K", a:{d:"Colombia",v:"Colombia",f:"co"},        b:{d:"RD del Congo",v:"RD del Congo",f:"cd"}},
+ {e:"1911110570", g:"Grupo L", a:{d:"Panamá",v:"Panama",f:"pa"},            b:{d:"Croacia",v:"Croacia",f:"hr"}}
+];
+
+const answers = {};
+const f = document.getElementById("qform");
+let html = `
+<div class="sec"><div class="sec-h"><span class="ico">👤</span><h2>Tus datos</h2></div>
+ <div class="card"><div class="q">Nombre completo <span class="req">*</span></div>
+ <input type="text" data-k="nombre" placeholder="Igual que en las rondas anteriores" autocomplete="name"></div></div>
+
+<div class="sec"><div class="sec-h"><span class="ico">⚽</span><h2>Jornada 2 · resto de partidos</h2><span class="pts">3 pts c/u</span></div>`;
+MATCHES.forEach(m=>{
+  html += `<div class="match">
+   <div class="mgrp">${m.g}</div>
+   <div class="mteams"><div class="mteam">${flag(m.a.f)}<span>${m.a.d}</span></div><div class="vs">VS</div>
+   <div class="mteam">${flag(m.b.f)}<span>${m.b.d}</span></div></div>
+   <div class="mbtns" data-k="m_${m.e}">
+    <button type="button" class="mbtn" data-v="${m.a.v}"><span class="e">${emoji(m.a.f)}</span>${m.a.d}</button>
+    <button type="button" class="mbtn" data-v="Empate"><span class="e">🤝</span>Empate</button>
+    <button type="button" class="mbtn" data-v="${m.b.v}"><span class="e">${emoji(m.b.f)}</span>${m.b.d}</button>
+   </div>
+  </div>`;
+});
+html += `</div>`;
+f.innerHTML = html;
+
+const REQUIRED = ["nombre"].concat(MATCHES.map(m=>"m_"+m.e));
+function refresh(){
+  const done = REQUIRED.filter(k=>answers[k]&&String(answers[k]).trim()).length;
+  document.getElementById("progfill").style.width = (done/REQUIRED.length*100)+"%";
+  document.getElementById("progtxt").textContent = done+" de "+REQUIRED.length+" respuestas";
+  document.getElementById("sendbtn").disabled = window.QCLOSED || done<REQUIRED.length;
+}
+document.querySelectorAll("input[data-k]").forEach(i=>i.addEventListener("input",()=>{answers[i.dataset.k]=i.value;refresh();}));
+document.querySelectorAll(".mbtns").forEach(g=>{
+  g.addEventListener("click",e=>{
+    const o=e.target.closest(".mbtn"); if(!o)return;
+    g.querySelectorAll(".mbtn").forEach(x=>x.classList.remove("sel")); o.classList.add("sel");
+    answers[g.dataset.k]=o.dataset.v; refresh();
+  });
+});
+
+function tick(){
+  const ms = DEADLINE - new Date();
+  const t=document.getElementById("timer");
+  if(ms<=0){ t.innerHTML='<span class="closed">⛔ CERRADA</span>'; window.QCLOSED=true; const b=document.getElementById("sendbtn"); b.disabled=true; b.textContent="Cerrada ⛔"; return; }
+  const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
+  document.getElementById("td").textContent=String(d).padStart(2,"0");
+  document.getElementById("th").textContent=String(h).padStart(2,"0");
+  document.getElementById("tm").textContent=String(m).padStart(2,"0");
+  setTimeout(tick,1000);
+}
+tick();
+
+function summary(){
+  const L=[];
+  L.push("⚽🔥 *MI RONDA 2 COMPLEMENTO — MUNDIAL 2026* 🔥⚽");
+  L.push("👤 "+answers.nombre);
+  L.push("");
+  MATCHES.forEach(m=>{
+    const v=answers["m_"+m.e];
+    const disp = v==="Empate" ? "Empate" : (v===m.a.v? m.a.d : m.b.d);
+    L.push("⚽ "+m.a.d+" vs "+m.b.d+": "+disp);
+  });
+  return L.join("\n");
+}
+
+document.getElementById("sendbtn").addEventListener("click", async ()=>{
+  const btn=document.getElementById("sendbtn"); btn.disabled=true; btn.textContent="Enviando… ⚽";
+  const p=new URLSearchParams();
+  p.append("entry."+E_NOMBRE, answers.nombre);
+  MATCHES.forEach(m=>p.append("entry."+m.e, answers["m_"+m.e]));
+  try{
+    await fetch(FORM_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:p.toString()});
+    const sum=summary();
+    document.getElementById("recap").textContent=sum.replace(/\*/g,"");
+    document.getElementById("walink").href="https://wa.me/?text="+encodeURIComponent(sum);
+    document.getElementById("formview").style.display="none";
+    document.getElementById("bar").style.display="none";
+    document.getElementById("successview").style.display="block";
+    window.scrollTo({top:0});
+  }catch(err){
+    const e=document.getElementById("errmsg"); e.style.display="block";
+    e.textContent="Hubo un problema al enviar. Revisa tu conexión e inténtalo otra vez.";
+    btn.disabled=false; btn.textContent="Enviar 🚀";
+  }
+});
+</script>
+</body>
+</html>
