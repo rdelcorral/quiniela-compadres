@@ -187,6 +187,39 @@ var SHORT_R2 = {
 };
 var NICE_R2 = {"Mexico":"México","Haiti":"Haití","Canada":"Canadá","Paises Bajos":"Países Bajos","Belgica":"Bélgica","Iran":"Irán","Espana":"España","Uzbekistan":"Uzbekistán","Si":"Sí","No":"No"};
 
+// ===== RONDA 2 · COMPLEMENTO (los otros 12 partidos de la Jornada 2) =====
+// Las claves deben coincidir EXACTO con los títulos de las preguntas del nuevo Google Form.
+// Pega aquí el CSV publicado de esa hoja para activarlo (mientras esté vacío, queda inerte).
+var CSV_URL_R2B = "";
+var RESULTS_R2B = {
+  "Chequia vs Sudáfrica": null,
+  "Suiza vs Bosnia y Herzegovina": null,
+  "Escocia vs Marruecos": null,
+  "Turquía vs Paraguay": null,
+  "Ecuador vs Curazao": null,
+  "Túnez vs Japón": null,
+  "Nueva Zelanda vs Egipto": null,
+  "Uruguay vs Cabo Verde": null,
+  "Noruega vs Senegal": null,
+  "Jordania vs Argelia": null,
+  "Colombia vs RD Congo": null,
+  "Panamá vs Croacia": null
+};
+var SCORES_R2B = {};
+var PTS_R2B = {
+  "Chequia vs Sudáfrica":3,"Suiza vs Bosnia y Herzegovina":3,"Escocia vs Marruecos":3,"Turquía vs Paraguay":3,
+  "Ecuador vs Curazao":3,"Túnez vs Japón":3,"Nueva Zelanda vs Egipto":3,"Uruguay vs Cabo Verde":3,
+  "Noruega vs Senegal":3,"Jordania vs Argelia":3,"Colombia vs RD Congo":3,"Panamá vs Croacia":3
+};
+var SHORT_R2B = {
+  "Chequia vs Sudáfrica":"⚽ Chequia vs Sudáfrica","Suiza vs Bosnia y Herzegovina":"⚽ Suiza vs Bosnia","Escocia vs Marruecos":"⚽ Escocia vs Marruecos",
+  "Turquía vs Paraguay":"⚽ Turquía vs Paraguay","Ecuador vs Curazao":"⚽ Ecuador vs Curazao","Túnez vs Japón":"⚽ Túnez vs Japón",
+  "Nueva Zelanda vs Egipto":"⚽ N. Zelanda vs Egipto","Uruguay vs Cabo Verde":"⚽ Uruguay vs Cabo Verde","Noruega vs Senegal":"⚽ Noruega vs Senegal",
+  "Jordania vs Argelia":"⚽ Jordania vs Argelia","Colombia vs RD Congo":"⚽ Colombia vs RD Congo","Panamá vs Croacia":"⚽ Panamá vs Croacia"
+};
+var NICE_R2B = {"Si":"Sí","No":"No"};
+var R2B_READY = typeof CSV_URL_R2B === "string" && CSV_URL_R2B.indexOf("http") === 0;
+
 function parseCSV(text){
   var rows=[], row=[], cell="", q=false, i, c;
   for(i=0;i<text.length;i++){
@@ -261,7 +294,7 @@ function getCSV(url){
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
     .then(function(t){ return parseCSV(t); });
 }
-function renderResults(RES, SCORES, SHORT, NICE, gridId){
+function renderResults(RES, SCORES, SHORT, NICE, gridId, append){
   var rhtml="";
   Object.keys(RES).forEach(function(k){
     var v=RES[k];
@@ -269,28 +302,33 @@ function renderResults(RES, SCORES, SHORT, NICE, gridId){
     rhtml += '<div class="rcard"><div class="m">'+(SHORT[k]||"⚽ "+k)+'</div>'
       + '<div class="r '+(v===null?"pend":"")+'">'+disp+'</div></div>';
   });
-  document.getElementById(gridId).innerHTML = rhtml;
+  var el=document.getElementById(gridId);
+  if(append) el.innerHTML += rhtml; else el.innerHTML = rhtml;
 }
 function main(){
   Promise.all([
     getCSV(CSV_URL).catch(function(){return null;}),
-    getCSV(CSV_URL_R2).catch(function(){return null;})
+    getCSV(CSV_URL_R2).catch(function(){return null;}),
+    R2B_READY ? getCSV(CSV_URL_R2B).catch(function(){return null;}) : Promise.resolve(null)
   ]).then(function(res){
-    var rows1=res[0], rows2=res[1];
-    if(!rows1 && !rows2) throw new Error("sin datos");
+    var rows1=res[0], rows2=res[1], rows2b=res[2];
+    if(!rows1 && !rows2 && !rows2b) throw new Error("sin datos");
     var r1 = scoreRound(rows1, RESULTS, PTS, SHORT, NICE, SCORES);
     var r2 = scoreRound(rows2, RESULTS_R2, PTS_R2, SHORT_R2, NICE_R2, SCORES_R2);
+    var r2b = R2B_READY ? scoreRound(rows2b, RESULTS_R2B, PTS_R2B, SHORT_R2B, NICE_R2B, SCORES_R2B)
+                        : {map:{}, captured:[], total:0};
     var names={};
-    Object.keys(r1.map).forEach(function(k){names[k]=1;});
-    Object.keys(r2.map).forEach(function(k){names[k]=1;});
+    [r1.map, r2.map, r2b.map].forEach(function(m){ Object.keys(m).forEach(function(k){names[k]=1;}); });
     var players = Object.keys(names).map(function(k){
-      var a=r1.map[k], b=r2.map[k];
-      return {name:(a&&a.name)||(b&&b.name), pts:(a?a.pts:0)+(b?b.pts:0), hits:(a?a.hits:0)+(b?b.hits:0),
-              detail:(a?a.detail:[]).concat(b?b.detail:[])};
+      var a=r1.map[k], b=r2.map[k], c=r2b.map[k];
+      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name),
+              pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0),
+              hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0),
+              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[])};
     }).sort(function(a,b){ return b.pts-a.pts || a.name.localeCompare(b.name,"es"); });
 
-    var totalCaptured = r1.captured.length + r2.captured.length;
-    var totalQ = r1.total + r2.total;
+    var totalCaptured = r1.captured.length + r2.captured.length + r2b.captured.length;
+    var totalQ = r1.total + r2.total + r2b.total;
     document.getElementById("nplayers").textContent=players.length;
     document.getElementById("nres").textContent=totalCaptured;
     document.getElementById("ntot").textContent=totalQ;
@@ -322,6 +360,7 @@ function main(){
 
     renderResults(RESULTS, SCORES, SHORT, NICE, "rgrid");
     renderResults(RESULTS_R2, SCORES_R2, SHORT_R2, NICE_R2, "rgrid2");
+    if(R2B_READY) renderResults(RESULTS_R2B, SCORES_R2B, SHORT_R2B, NICE_R2B, "rgrid2", true);
 
     setBusy(false);
     var now = new Date();
