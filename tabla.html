@@ -158,7 +158,7 @@ var GOLEADOR_KEY = "¿Quién será el máximo goleador del Mundial?";
 var CSV_URL_R2 = "https://docs.google.com/spreadsheets/d/1lvNjjSdaNMRkORnnoIcr27oMZkz369gmyAdxTSvaaa4/gviz/tq?tqx=out:csv";
 var RESULTS_R2 = {
   "Mexico vs Corea del Sur": null,
-  "Canada vs Catar": null,
+  "Canada vs Catar": "Canada",
   "Brasil vs Haiti": null,
   "Estados Unidos vs Australia": null,
   "Alemania vs Costa de Marfil": null,
@@ -169,9 +169,11 @@ var RESULTS_R2 = {
   "Argentina vs Austria": null,
   "Portugal vs Uzbekistan": null,
   "Inglaterra vs Ghana": null,
-  "Habra una goleada (3+ goles de diferencia) en la jornada 2?": null
+  "Habra una goleada (3+ goles de diferencia) en la jornada 2?": "Si"
 };
-var SCORES_R2 = {};
+var SCORES_R2 = {
+  "Canada vs Catar":"6-0"
+};
 var PTS_R2 = {
   "Mexico vs Corea del Sur":3,"Canada vs Catar":3,"Brasil vs Haiti":3,"Estados Unidos vs Australia":3,
   "Alemania vs Costa de Marfil":3,"Paises Bajos vs Suecia":3,"Belgica vs Iran":3,"Espana vs Arabia Saudita":3,
@@ -190,8 +192,8 @@ var NICE_R2 = {"Mexico":"México","Haiti":"Haití","Canada":"Canadá","Paises Ba
 // ===== RONDA 2 COMPLEMENTO (los otros 12 de la jornada 2) =====
 var CSV_URL_R2C = "https://docs.google.com/spreadsheets/d/1p0kLpc60WZc6_YWvIo19EnjR-L9B_PwpIwrrN83wQbk/gviz/tq?tqx=out:csv";
 var RESULTS_R2C = {
-  "Chequia vs Sudafrica": null,
-  "Suiza vs Bosnia y Herzegovina": null,
+  "Chequia vs Sudafrica": "Empate",
+  "Suiza vs Bosnia y Herzegovina": "Suiza",
   "Escocia vs Marruecos": null,
   "Turquia vs Paraguay": null,
   "Ecuador vs Curazao": null,
@@ -203,7 +205,10 @@ var RESULTS_R2C = {
   "Colombia vs RD del Congo": null,
   "Panama vs Croacia": null
 };
-var SCORES_R2C = {};
+var SCORES_R2C = {
+  "Chequia vs Sudafrica":"1-1",
+  "Suiza vs Bosnia y Herzegovina":"4-1"
+};
 var PTS_R2C = {
   "Chequia vs Sudafrica":3,"Suiza vs Bosnia y Herzegovina":3,"Escocia vs Marruecos":3,"Turquia vs Paraguay":3,
   "Ecuador vs Curazao":3,"Tunez vs Japon":3,"Nueva Zelanda vs Egipto":3,"Uruguay vs Cabo Verde":3,
