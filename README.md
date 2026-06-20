@@ -14,7 +14,7 @@ Los marcadores NO se obtienen automáticamente en el navegador. Se editan a mano
 - En `RESULTS` / `RESULTS_R2`: cambiar el valor del partido de `null` al ganador o `"Empate"` (el texto debe coincidir EXACTO con la opción del Google Form; Ronda 1 con acentos, Ronda 2 sin acentos).
 - En `SCORES` / `SCORES_R2`: agregar el marcador `"X-Y"` (solo para mostrar).
 
-Una **tarea programada de Claude** (`actualizar-quiniela-mundial`, corre 4pm y 10pm) busca los resultados finales en la web y hace estos cambios. **Importante:** revisar que TODA pregunta del formulario tenga su clave en `RESULTS` (las claves deben ser idénticas a las columnas del CSV de respuestas).
+Una **tarea programada de Claude** (`actualizar-quiniela-mundial`) busca los resultados finales en la web y hace estos cambios siguiendo el playbook **[`AGENTE-QUINIELA.md`](AGENTE-QUINIELA.md)** (calendario de partidos + procedimiento; captura cada partido ~30 min después de terminar y hace push a `main`). **Importante:** revisar que TODA pregunta del formulario tenga su clave en `RESULTS` (las claves deben ser idénticas a las columnas del CSV de respuestas).
 
 ## Despliegue
 Con este repo conectado a Vercel, cada `git push` a la rama principal **despliega solo**. Ya no hace falta usar la API de Vercel a mano.
