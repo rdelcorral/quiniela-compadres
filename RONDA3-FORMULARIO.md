@@ -1,7 +1,13 @@
 # 📝 Ronda 3 (Jornada 3 de grupos) — Estructura de los formularios
 
+> ✅ **FORMA RECOMENDADA (un solo form, automático):** usa el script
+> **`APPS-SCRIPT-RONDA3.gs`** — crea el formulario único con los 24 partidos + nombre +
+> goleada, lo conecta a una hoja y te imprime la URL, los entry IDs y el CSV. Solo lo
+> pegas en script.google.com, Ejecutas y Autorizas. Lo de abajo (dos forms a mano) queda
+> solo como referencia del texto exacto de preguntas/opciones.
+
 La J3 arranca el **24 jun**, así que el **cierre de pronósticos debe ser antes** (ver `DEADLINE`).
-Igual que la Ronda 2: **dos** Google Forms (Principal + Complemento), 12 partidos cada uno.
+La página `ronda3.html` es **un solo enlace** con los 24 partidos.
 
 > ⚠️ **CLAVE:** el **título de cada pregunta** y el **texto de cada opción** deben ir
 > EXACTAMENTE como aparecen aquí (sin acentos, igual que R2). El título de la pregunta

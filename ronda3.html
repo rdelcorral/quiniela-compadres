@@ -130,14 +130,11 @@ input:focus{outline:2px solid var(--green);border-color:var(--green)}
    ========================================================================== */
 const READY = false;
 
-// Formulario PRINCIPAL (12 partidos + nombre + especial goleada)
-const FORM_URL_P = "https://docs.google.com/forms/d/e/PENDIENTE_PRINCIPAL/formResponse";
-const E_NOMBRE_P = "";   // entry ID del "Nombre completo" en el form Principal
-const E_ESP      = "";   // entry ID de la pregunta de la goleada (Principal)
-
-// Formulario COMPLEMENTO (12 partidos + nombre)
-const FORM_URL_C = "https://docs.google.com/forms/d/e/PENDIENTE_COMPLEMENTO/formResponse";
-const E_NOMBRE_C = "";   // entry ID del "Nombre completo" en el form Complemento
+// UN SOLO Google Form con los 24 partidos + nombre + especial goleada.
+// Llenar con la salida del script APPS-SCRIPT-RONDA3.gs y poner READY = true.
+const FORM_URL = "https://docs.google.com/forms/d/e/PENDIENTE/formResponse";
+const E_NOMBRE = "";   // entry ID del "Nombre completo"
+const E_ESP    = "";   // entry ID de la pregunta de la goleada
 
 const DEADLINE = new Date("2026-06-24T15:00:00Z"); // 9:00 am CDMX del 24 jun (ajustable)
 
@@ -254,20 +251,12 @@ function summary(){
 document.getElementById("sendbtn").addEventListener("click", async ()=>{
   if(!READY) return;
   const btn=document.getElementById("sendbtn"); btn.disabled=true; btn.textContent="Enviando… ⚽";
-  const pP=new URLSearchParams(), pC=new URLSearchParams();
-  pP.append("entry."+E_NOMBRE_P, answers.nombre);
-  pC.append("entry."+E_NOMBRE_C, answers.nombre);
-  pP.append("entry."+E_ESP, answers.esp);
-  MATCHES.forEach(m=>{
-    const val=answers["m_"+m.id];
-    if(m.form==="P") pP.append("entry."+m.e, val);
-    else pC.append("entry."+m.e, val);
-  });
+  const p=new URLSearchParams();
+  p.append("entry."+E_NOMBRE, answers.nombre);
+  p.append("entry."+E_ESP, answers.esp);
+  MATCHES.forEach(m=>p.append("entry."+m.e, answers["m_"+m.id]));
   try{
-    await Promise.all([
-      fetch(FORM_URL_P,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:pP.toString()}),
-      fetch(FORM_URL_C,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:pC.toString()})
-    ]);
+    await fetch(FORM_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:p.toString()});
     const sum=summary();
     document.getElementById("recap").textContent=sum.replace(/\*/g,"");
     document.getElementById("walink").href="https://wa.me/?text="+encodeURIComponent(sum);
