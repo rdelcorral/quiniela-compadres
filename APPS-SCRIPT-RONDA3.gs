@@ -68,9 +68,9 @@ function crearRonda3() {
 
   // Saca el entry ID de cada pregunta vía URL pre-rellenada
   function entryId(item, val) {
-    var resp = (item.getType() === FormApp.ItemType.TEXT)
-      ? item.asTextItem().createResponse(val)
-      : item.asMultipleChoiceItem().createResponse(val);
+    // Los items ya vienen tipados (addTextItem/addMultipleChoiceItem), así que
+    // createResponse() se llama directo; nada de asTextItem()/asMultipleChoiceItem().
+    var resp = item.createResponse(val);
     var url = form.createResponse().withItemResponse(resp).toPrefilledUrl();
     var m = url.match(/entry\.(\d+)/);
     return m ? m[1] : '???';
