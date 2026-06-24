@@ -128,13 +128,12 @@ input:focus{outline:2px solid var(--green);border-color:var(--green)}
    Pega aquí: las 2 URLs (.../formResponse), los entry IDs del Nombre y de la
    especial, y el entry ID de cada partido (campo "e"). Luego pon READY = true.
    ========================================================================== */
-const READY = false;
+const READY = true;
 
 // UN SOLO Google Form con los 24 partidos + nombre + especial goleada.
-// Llenar con la salida del script APPS-SCRIPT-RONDA3.gs y poner READY = true.
-const FORM_URL = "https://docs.google.com/forms/d/e/PENDIENTE/formResponse";
-const E_NOMBRE = "";   // entry ID del "Nombre completo"
-const E_ESP    = "";   // entry ID de la pregunta de la goleada
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe82U0Z_7BROA9eX-mEUJrYFYENkjL70lmj9AK3h08hnxXT0w/formResponse";
+const E_NOMBRE = "1379037996";   // entry ID del "Nombre completo"
+const E_ESP    = "799916285";    // entry ID de la pregunta de la goleada
 
 const DEADLINE = new Date("2026-06-24T15:00:00Z"); // 9:00 am CDMX del 24 jun (ajustable)
 
@@ -145,30 +144,30 @@ function emoji(code){var c=FLAG[code]; if(c==="gb-eng")return "🏴󠁧󠁢󠁥�
 // Cada partido: id estable (UI) · e=entry ID Google (llenar) · form P/C · grupo · equipo A · equipo B.
 // El TÍTULO de la pregunta en el Google Form debe ser EXACTO: "<a.v> vs <b.v>" (ver RONDA3-FORMULARIO.md).
 const MATCHES = [
- {id:"A1", e:"", form:"P", g:"Grupo A", a:{d:"México",v:"Mexico",f:"mx"},               b:{d:"Chequia",v:"Chequia",f:"cz"}},
- {id:"A2", e:"", form:"C", g:"Grupo A", a:{d:"Corea del Sur",v:"Corea del Sur",f:"kr"}, b:{d:"Sudáfrica",v:"Sudafrica",f:"za"}},
- {id:"B1", e:"", form:"P", g:"Grupo B", a:{d:"Canadá",v:"Canada",f:"ca"},               b:{d:"Suiza",v:"Suiza",f:"ch"}},
- {id:"B2", e:"", form:"C", g:"Grupo B", a:{d:"Bosnia y Herzeg.",v:"Bosnia y Herzegovina",f:"ba"}, b:{d:"Catar",v:"Catar",f:"qa"}},
- {id:"C1", e:"", form:"P", g:"Grupo C", a:{d:"Brasil",v:"Brasil",f:"br"},               b:{d:"Escocia",v:"Escocia",f:"sct"}},
- {id:"C2", e:"", form:"C", g:"Grupo C", a:{d:"Marruecos",v:"Marruecos",f:"ma"},         b:{d:"Haití",v:"Haiti",f:"ht"}},
- {id:"D1", e:"", form:"P", g:"Grupo D", a:{d:"Estados Unidos",v:"Estados Unidos",f:"us"}, b:{d:"Turquía",v:"Turquia",f:"tr"}},
- {id:"D2", e:"", form:"C", g:"Grupo D", a:{d:"Australia",v:"Australia",f:"au"},          b:{d:"Paraguay",v:"Paraguay",f:"py"}},
- {id:"E1", e:"", form:"P", g:"Grupo E", a:{d:"Alemania",v:"Alemania",f:"de"},           b:{d:"Ecuador",v:"Ecuador",f:"ec"}},
- {id:"E2", e:"", form:"C", g:"Grupo E", a:{d:"Costa de Marfil",v:"Costa de Marfil",f:"ci"}, b:{d:"Curazao",v:"Curazao",f:"cw"}},
- {id:"F1", e:"", form:"P", g:"Grupo F", a:{d:"Países Bajos",v:"Paises Bajos",f:"nl"},   b:{d:"Túnez",v:"Tunez",f:"tn"}},
- {id:"F2", e:"", form:"C", g:"Grupo F", a:{d:"Suecia",v:"Suecia",f:"se"},               b:{d:"Japón",v:"Japon",f:"jp"}},
- {id:"G1", e:"", form:"P", g:"Grupo G", a:{d:"Bélgica",v:"Belgica",f:"be"},             b:{d:"Nueva Zelanda",v:"Nueva Zelanda",f:"nz"}},
- {id:"G2", e:"", form:"C", g:"Grupo G", a:{d:"Egipto",v:"Egipto",f:"eg"},               b:{d:"Irán",v:"Iran",f:"ir"}},
- {id:"H1", e:"", form:"P", g:"Grupo H", a:{d:"España",v:"Espana",f:"es"},               b:{d:"Uruguay",v:"Uruguay",f:"uy"}},
- {id:"H2", e:"", form:"C", g:"Grupo H", a:{d:"Cabo Verde",v:"Cabo Verde",f:"cv"},       b:{d:"Arabia Saudita",v:"Arabia Saudita",f:"sa"}},
- {id:"I1", e:"", form:"P", g:"Grupo I", a:{d:"Francia",v:"Francia",f:"fr"},             b:{d:"Noruega",v:"Noruega",f:"no"}},
- {id:"I2", e:"", form:"C", g:"Grupo I", a:{d:"Irak",v:"Irak",f:"iq"},                   b:{d:"Senegal",v:"Senegal",f:"sn"}},
- {id:"J1", e:"", form:"P", g:"Grupo J", a:{d:"Argentina",v:"Argentina",f:"ar"},         b:{d:"Jordania",v:"Jordania",f:"jo"}},
- {id:"J2", e:"", form:"C", g:"Grupo J", a:{d:"Argelia",v:"Argelia",f:"dz"},             b:{d:"Austria",v:"Austria",f:"at"}},
- {id:"K1", e:"", form:"P", g:"Grupo K", a:{d:"Portugal",v:"Portugal",f:"pt"},           b:{d:"Colombia",v:"Colombia",f:"co"}},
- {id:"K2", e:"", form:"C", g:"Grupo K", a:{d:"RD del Congo",v:"RD del Congo",f:"cd"},   b:{d:"Uzbekistán",v:"Uzbekistan",f:"uz"}},
- {id:"L1", e:"", form:"P", g:"Grupo L", a:{d:"Inglaterra",v:"Inglaterra",f:"eng"},      b:{d:"Panamá",v:"Panama",f:"pa"}},
- {id:"L2", e:"", form:"C", g:"Grupo L", a:{d:"Croacia",v:"Croacia",f:"hr"},             b:{d:"Ghana",v:"Ghana",f:"gh"}}
+ {id:"A1", e:"1359721315", form:"P", g:"Grupo A", a:{d:"México",v:"Mexico",f:"mx"},               b:{d:"Chequia",v:"Chequia",f:"cz"}},
+ {id:"A2", e:"1902610352", form:"C", g:"Grupo A", a:{d:"Corea del Sur",v:"Corea del Sur",f:"kr"}, b:{d:"Sudáfrica",v:"Sudafrica",f:"za"}},
+ {id:"B1", e:"719492662",  form:"P", g:"Grupo B", a:{d:"Canadá",v:"Canada",f:"ca"},               b:{d:"Suiza",v:"Suiza",f:"ch"}},
+ {id:"B2", e:"1759266078", form:"C", g:"Grupo B", a:{d:"Bosnia y Herzeg.",v:"Bosnia y Herzegovina",f:"ba"}, b:{d:"Catar",v:"Catar",f:"qa"}},
+ {id:"C1", e:"155494532",  form:"P", g:"Grupo C", a:{d:"Brasil",v:"Brasil",f:"br"},               b:{d:"Escocia",v:"Escocia",f:"sct"}},
+ {id:"C2", e:"994340901",  form:"C", g:"Grupo C", a:{d:"Marruecos",v:"Marruecos",f:"ma"},         b:{d:"Haití",v:"Haiti",f:"ht"}},
+ {id:"D1", e:"1217937666", form:"P", g:"Grupo D", a:{d:"Estados Unidos",v:"Estados Unidos",f:"us"}, b:{d:"Turquía",v:"Turquia",f:"tr"}},
+ {id:"D2", e:"971424609",  form:"C", g:"Grupo D", a:{d:"Australia",v:"Australia",f:"au"},          b:{d:"Paraguay",v:"Paraguay",f:"py"}},
+ {id:"E1", e:"1162283213", form:"P", g:"Grupo E", a:{d:"Alemania",v:"Alemania",f:"de"},           b:{d:"Ecuador",v:"Ecuador",f:"ec"}},
+ {id:"E2", e:"905210029",  form:"C", g:"Grupo E", a:{d:"Costa de Marfil",v:"Costa de Marfil",f:"ci"}, b:{d:"Curazao",v:"Curazao",f:"cw"}},
+ {id:"F1", e:"1860589859", form:"P", g:"Grupo F", a:{d:"Países Bajos",v:"Paises Bajos",f:"nl"},   b:{d:"Túnez",v:"Tunez",f:"tn"}},
+ {id:"F2", e:"1803728443", form:"C", g:"Grupo F", a:{d:"Suecia",v:"Suecia",f:"se"},               b:{d:"Japón",v:"Japon",f:"jp"}},
+ {id:"G1", e:"487857578",  form:"P", g:"Grupo G", a:{d:"Bélgica",v:"Belgica",f:"be"},             b:{d:"Nueva Zelanda",v:"Nueva Zelanda",f:"nz"}},
+ {id:"G2", e:"1931532270", form:"C", g:"Grupo G", a:{d:"Egipto",v:"Egipto",f:"eg"},               b:{d:"Irán",v:"Iran",f:"ir"}},
+ {id:"H1", e:"693234468",  form:"P", g:"Grupo H", a:{d:"España",v:"Espana",f:"es"},               b:{d:"Uruguay",v:"Uruguay",f:"uy"}},
+ {id:"H2", e:"311170926",  form:"C", g:"Grupo H", a:{d:"Cabo Verde",v:"Cabo Verde",f:"cv"},       b:{d:"Arabia Saudita",v:"Arabia Saudita",f:"sa"}},
+ {id:"I1", e:"1234262385", form:"P", g:"Grupo I", a:{d:"Francia",v:"Francia",f:"fr"},             b:{d:"Noruega",v:"Noruega",f:"no"}},
+ {id:"I2", e:"1984843016", form:"C", g:"Grupo I", a:{d:"Irak",v:"Irak",f:"iq"},                   b:{d:"Senegal",v:"Senegal",f:"sn"}},
+ {id:"J1", e:"2086195454", form:"P", g:"Grupo J", a:{d:"Argentina",v:"Argentina",f:"ar"},         b:{d:"Jordania",v:"Jordania",f:"jo"}},
+ {id:"J2", e:"1238007486", form:"C", g:"Grupo J", a:{d:"Argelia",v:"Argelia",f:"dz"},             b:{d:"Austria",v:"Austria",f:"at"}},
+ {id:"K1", e:"925962480",  form:"P", g:"Grupo K", a:{d:"Portugal",v:"Portugal",f:"pt"},           b:{d:"Colombia",v:"Colombia",f:"co"}},
+ {id:"K2", e:"677012412",  form:"C", g:"Grupo K", a:{d:"RD del Congo",v:"RD del Congo",f:"cd"},   b:{d:"Uzbekistán",v:"Uzbekistan",f:"uz"}},
+ {id:"L1", e:"1502666737", form:"P", g:"Grupo L", a:{d:"Inglaterra",v:"Inglaterra",f:"eng"},      b:{d:"Panamá",v:"Panama",f:"pa"}},
+ {id:"L2", e:"1987537751", form:"C", g:"Grupo L", a:{d:"Croacia",v:"Croacia",f:"hr"},             b:{d:"Ghana",v:"Ghana",f:"gh"}}
 ];
 
 const answers = {};

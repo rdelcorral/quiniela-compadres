@@ -88,8 +88,10 @@ h1 .gold{color:var(--gold)}
     <div class="rgrid" id="rgrid2"></div>
     <div class="rsub">🔥 Ronda 2 · Complemento</div>
     <div class="rgrid" id="rgrid2c"></div>
+    <div class="rsub">🏁 Ronda 3 · Jornada 3</div>
+    <div class="rgrid" id="rgrid3"></div>
   </div>
-  <div class="foot">Suma Ronda 1 + Ronda 2 · se actualiza al abrir la página.<br><a href="/ronda2">🔥 Jugar la Ronda 2</a> · <a href="/">← Volver a la quiniela</a></div>
+  <div class="foot">Suma Ronda 1 + Ronda 2 + Ronda 3 · se actualiza al abrir la página.<br><a href="/ronda3">🏁 Jugar la Ronda 3</a> · <a href="/">← Volver a la quiniela</a></div>
 </div>
 
 <script>
@@ -242,6 +244,62 @@ var SHORT_R2C = {
 };
 var NICE_R2C = {"Sudafrica":"Sudáfrica","Turquia":"Turquía","Tunez":"Túnez","Japon":"Japón","Panama":"Panamá"};
 
+// ===== RONDA 3 (Jornada 3 de grupos) =====
+var CSV_URL_R3 = "https://docs.google.com/spreadsheets/d/1esQ0CS3D9EVVzdi8zUvy3Sfq4VhWQNJj-LyfK4Fv5KM/gviz/tq?tqx=out:csv";
+var RESULTS_R3 = {
+  "Mexico vs Chequia": null,
+  "Corea del Sur vs Sudafrica": null,
+  "Canada vs Suiza": null,
+  "Bosnia y Herzegovina vs Catar": null,
+  "Brasil vs Escocia": null,
+  "Marruecos vs Haiti": null,
+  "Estados Unidos vs Turquia": null,
+  "Australia vs Paraguay": null,
+  "Alemania vs Ecuador": null,
+  "Costa de Marfil vs Curazao": null,
+  "Paises Bajos vs Tunez": null,
+  "Suecia vs Japon": null,
+  "Belgica vs Nueva Zelanda": null,
+  "Egipto vs Iran": null,
+  "Espana vs Uruguay": null,
+  "Cabo Verde vs Arabia Saudita": null,
+  "Francia vs Noruega": null,
+  "Irak vs Senegal": null,
+  "Argentina vs Jordania": null,
+  "Argelia vs Austria": null,
+  "Portugal vs Colombia": null,
+  "RD del Congo vs Uzbekistan": null,
+  "Inglaterra vs Panama": null,
+  "Croacia vs Ghana": null,
+  "Habra una goleada (3+ goles de diferencia) en la jornada 3?": null
+};
+var SCORES_R3 = {};
+var PTS_R3 = {
+  "Mexico vs Chequia":3,"Corea del Sur vs Sudafrica":3,"Canada vs Suiza":3,"Bosnia y Herzegovina vs Catar":3,
+  "Brasil vs Escocia":3,"Marruecos vs Haiti":3,"Estados Unidos vs Turquia":3,"Australia vs Paraguay":3,
+  "Alemania vs Ecuador":3,"Costa de Marfil vs Curazao":3,"Paises Bajos vs Tunez":3,"Suecia vs Japon":3,
+  "Belgica vs Nueva Zelanda":3,"Egipto vs Iran":3,"Espana vs Uruguay":3,"Cabo Verde vs Arabia Saudita":3,
+  "Francia vs Noruega":3,"Irak vs Senegal":3,"Argentina vs Jordania":3,"Argelia vs Austria":3,
+  "Portugal vs Colombia":3,"RD del Congo vs Uzbekistan":3,"Inglaterra vs Panama":3,"Croacia vs Ghana":3,
+  "Habra una goleada (3+ goles de diferencia) en la jornada 3?":3
+};
+var SHORT_R3 = {
+  "Mexico vs Chequia":"⚽ México vs Chequia","Corea del Sur vs Sudafrica":"⚽ Corea vs Sudáfrica",
+  "Canada vs Suiza":"⚽ Canadá vs Suiza","Bosnia y Herzegovina vs Catar":"⚽ Bosnia vs Catar",
+  "Brasil vs Escocia":"⚽ Brasil vs Escocia","Marruecos vs Haiti":"⚽ Marruecos vs Haití",
+  "Estados Unidos vs Turquia":"⚽ USA vs Turquía","Australia vs Paraguay":"⚽ Australia vs Paraguay",
+  "Alemania vs Ecuador":"⚽ Alemania vs Ecuador","Costa de Marfil vs Curazao":"⚽ C. Marfil vs Curazao",
+  "Paises Bajos vs Tunez":"⚽ P. Bajos vs Túnez","Suecia vs Japon":"⚽ Suecia vs Japón",
+  "Belgica vs Nueva Zelanda":"⚽ Bélgica vs N. Zelanda","Egipto vs Iran":"⚽ Egipto vs Irán",
+  "Espana vs Uruguay":"⚽ España vs Uruguay","Cabo Verde vs Arabia Saudita":"⚽ Cabo Verde vs Arabia",
+  "Francia vs Noruega":"⚽ Francia vs Noruega","Irak vs Senegal":"⚽ Irak vs Senegal",
+  "Argentina vs Jordania":"⚽ Argentina vs Jordania","Argelia vs Austria":"⚽ Argelia vs Austria",
+  "Portugal vs Colombia":"⚽ Portugal vs Colombia","RD del Congo vs Uzbekistan":"⚽ RD Congo vs Uzbekistán",
+  "Inglaterra vs Panama":"⚽ Inglaterra vs Panamá","Croacia vs Ghana":"⚽ Croacia vs Ghana",
+  "Habra una goleada (3+ goles de diferencia) en la jornada 3?":"💥 Goleada en J3"
+};
+var NICE_R3 = {"Mexico":"México","Sudafrica":"Sudáfrica","Canada":"Canadá","Haiti":"Haití","Turquia":"Turquía","Paises Bajos":"Países Bajos","Tunez":"Túnez","Japon":"Japón","Belgica":"Bélgica","Iran":"Irán","Espana":"España","Uzbekistan":"Uzbekistán","Panama":"Panamá","Si":"Sí","No":"No"};
+
 function parseCSV(text){
   var rows=[], row=[], cell="", q=false, i, c;
   for(i=0;i<text.length;i++){
@@ -334,25 +392,28 @@ function main(){
   Promise.all([
     getCSV(CSV_URL).catch(function(){return null;}),
     getCSV(CSV_URL_R2).catch(function(){return null;}),
-    getCSV(CSV_URL_R2C).catch(function(){return null;})
+    getCSV(CSV_URL_R2C).catch(function(){return null;}),
+    getCSV(CSV_URL_R3).catch(function(){return null;})
   ]).then(function(res){
-    var rows1=res[0], rows2=res[1], rows3=res[2];
-    if(!rows1 && !rows2 && !rows3) throw new Error("sin datos");
+    var rows1=res[0], rows2=res[1], rows3=res[2], rows4=res[3];
+    if(!rows1 && !rows2 && !rows3 && !rows4) throw new Error("sin datos");
     var r1 = scoreRound(rows1, RESULTS, PTS, SHORT, NICE, SCORES);
     var r2 = scoreRound(rows2, RESULTS_R2, PTS_R2, SHORT_R2, NICE_R2, SCORES_R2);
     var r3 = scoreRound(rows3, RESULTS_R2C, PTS_R2C, SHORT_R2C, NICE_R2C, SCORES_R2C);
+    var r4 = scoreRound(rows4, RESULTS_R3, PTS_R3, SHORT_R3, NICE_R3, SCORES_R3);
     var names={};
     Object.keys(r1.map).forEach(function(k){names[k]=1;});
     Object.keys(r2.map).forEach(function(k){names[k]=1;});
     Object.keys(r3.map).forEach(function(k){names[k]=1;});
+    Object.keys(r4.map).forEach(function(k){names[k]=1;});
     var players = Object.keys(names).map(function(k){
-      var a=r1.map[k], b=r2.map[k], c=r3.map[k];
-      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0),
-              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[])};
+      var a=r1.map[k], b=r2.map[k], c=r3.map[k], d=r4.map[k];
+      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name)||(d&&d.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0)+(d?d.hits:0),
+              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[]).concat(d?d.detail:[])};
     }).sort(function(a,b){ return b.pts-a.pts || a.name.localeCompare(b.name,"es"); });
 
-    var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length;
-    var totalQ = r1.total + r2.total + r3.total;
+    var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length + r4.captured.length;
+    var totalQ = r1.total + r2.total + r3.total + r4.total;
     document.getElementById("nplayers").textContent=players.length;
     document.getElementById("nres").textContent=totalCaptured;
     document.getElementById("ntot").textContent=totalQ;
@@ -385,6 +446,7 @@ function main(){
     renderResults(RESULTS, SCORES, SHORT, NICE, "rgrid");
     renderResults(RESULTS_R2, SCORES_R2, SHORT_R2, NICE_R2, "rgrid2");
     renderResults(RESULTS_R2C, SCORES_R2C, SHORT_R2C, NICE_R2C, "rgrid2c");
+    renderResults(RESULTS_R3, SCORES_R3, SHORT_R3, NICE_R3, "rgrid3");
   }).catch(function(e){
     document.getElementById("board").innerHTML='<div class="error">No pude cargar las respuestas. Recarga la página en unos segundos.</div>';
   });

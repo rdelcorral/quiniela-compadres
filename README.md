@@ -7,7 +7,8 @@ Sitio estático de la quiniela del Mundial 2026 entre compadres. Alojado en **Ve
 - **`index.html`** → formulario de la **Ronda 1** (pronósticos previos al torneo: campeón, goleador, partidos jornada 1, etc.). Postea a un Google Form.
 - **`tabla.html`** (`/tabla`) → tabla de posiciones. Lee las respuestas de los Google Forms (CSV), las califica contra los objetos `RESULTS` (Ronda 1) y `RESULTS_R2` (Ronda 2) incrustados, y **suma R1 + R2 por nombre del participante**. Tiene botón "🔄 Actualizar" (recalcula desde el CSV) y desglose de puntos al hacer clic en cada participante.
 - **`ronda2.html`** (`/ronda2`) → formulario de la **Ronda 2** (jornada 2 de grupos). Postea a un segundo Google Form.
-- **`vercel.json`** → `{ "cleanUrls": true }` (permite `/tabla` y `/ronda2` sin `.html`).
+- **`ronda3.html`** (`/ronda3`) → formulario de la **Ronda 3** (jornada 3 de grupos): un solo enlace con los 24 partidos + especial de goleada. Postea a un Google Form único (creado con `APPS-SCRIPT-RONDA3.gs`). `tabla.html` suma R1+R2+R3.
+- **`vercel.json`** → `{ "cleanUrls": true }` (permite `/tabla`, `/ronda2` y `/ronda3` sin `.html`).
 
 ## Cómo se capturan los resultados
 Los marcadores NO se obtienen automáticamente en el navegador. Se editan a mano en `tabla.html`:
