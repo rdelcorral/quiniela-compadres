@@ -282,18 +282,18 @@ var SCORES_R3 = {
   "Brasil vs Escocia":"3-0"
 };
 var PTS_R3 = {
-  "Mexico vs Chequia":0,"Corea del Sur vs Sudafrica":0,"Canada vs Suiza":0,"Bosnia y Herzegovina vs Catar":0,
-  "Brasil vs Escocia":0,"Marruecos vs Haiti":0,"Estados Unidos vs Turquia":3,"Australia vs Paraguay":3,
+  "Mexico vs Chequia":3,"Corea del Sur vs Sudafrica":3,"Canada vs Suiza":3,"Bosnia y Herzegovina vs Catar":3,
+  "Brasil vs Escocia":3,"Marruecos vs Haiti":3,"Estados Unidos vs Turquia":3,"Australia vs Paraguay":3,
   "Alemania vs Ecuador":3,"Costa de Marfil vs Curazao":3,"Paises Bajos vs Tunez":3,"Suecia vs Japon":3,
   "Belgica vs Nueva Zelanda":3,"Egipto vs Iran":3,"Espana vs Uruguay":3,"Cabo Verde vs Arabia Saudita":3,
   "Francia vs Noruega":3,"Irak vs Senegal":3,"Argentina vs Jordania":3,"Argelia vs Austria":3,
   "Portugal vs Colombia":3,"RD del Congo vs Uzbekistan":3,"Inglaterra vs Panama":3,"Croacia vs Ghana":3,
-  "Habra una goleada (3+ goles de diferencia) en la jornada 3?":0
+  "Habra una goleada (3+ goles de diferencia) en la jornada 3?":3
 };
 var SHORT_R3 = {
-  "Mexico vs Chequia":"⚽ México vs Chequia 🚫(no cuenta)","Corea del Sur vs Sudafrica":"⚽ Corea vs Sudáfrica 🚫(no cuenta)",
-  "Canada vs Suiza":"⚽ Canadá vs Suiza 🚫(no cuenta)","Bosnia y Herzegovina vs Catar":"⚽ Bosnia vs Catar 🚫(no cuenta)",
-  "Brasil vs Escocia":"⚽ Brasil vs Escocia 🚫(no cuenta)","Marruecos vs Haiti":"⚽ Marruecos vs Haití 🚫(no cuenta)",
+  "Mexico vs Chequia":"⚽ México vs Chequia","Corea del Sur vs Sudafrica":"⚽ Corea vs Sudáfrica",
+  "Canada vs Suiza":"⚽ Canadá vs Suiza","Bosnia y Herzegovina vs Catar":"⚽ Bosnia vs Catar",
+  "Brasil vs Escocia":"⚽ Brasil vs Escocia","Marruecos vs Haiti":"⚽ Marruecos vs Haití",
   "Estados Unidos vs Turquia":"⚽ USA vs Turquía","Australia vs Paraguay":"⚽ Australia vs Paraguay",
   "Alemania vs Ecuador":"⚽ Alemania vs Ecuador","Costa de Marfil vs Curazao":"⚽ C. Marfil vs Curazao",
   "Paises Bajos vs Tunez":"⚽ P. Bajos vs Túnez","Suecia vs Japon":"⚽ Suecia vs Japón",
@@ -303,9 +303,42 @@ var SHORT_R3 = {
   "Argentina vs Jordania":"⚽ Argentina vs Jordania","Argelia vs Austria":"⚽ Argelia vs Austria",
   "Portugal vs Colombia":"⚽ Portugal vs Colombia","RD del Congo vs Uzbekistan":"⚽ RD Congo vs Uzbekistán",
   "Inglaterra vs Panama":"⚽ Inglaterra vs Panamá","Croacia vs Ghana":"⚽ Croacia vs Ghana",
-  "Habra una goleada (3+ goles de diferencia) en la jornada 3?":"💥 Goleada en J3 🚫(no cuenta)"
+  "Habra una goleada (3+ goles de diferencia) en la jornada 3?":"💥 Goleada en J3"
 };
 var NICE_R3 = {"Mexico":"México","Sudafrica":"Sudáfrica","Canada":"Canadá","Haiti":"Haití","Turquia":"Turquía","Paises Bajos":"Países Bajos","Tunez":"Túnez","Japon":"Japón","Belgica":"Bélgica","Iran":"Irán","Espana":"España","Uzbekistan":"Uzbekistán","Panama":"Panamá","Si":"Sí","No":"No"};
+// Hora de inicio de cada partido de la J3 (en UTC). Un partido SOLO cuenta para un
+// participante si su envío (marca de tiempo) fue ANTES de este momento. Así, quien
+// pronosticó a tiempo suma todo, y quien entró tarde no gana por partidos ya jugados.
+// (CDMX = UTC-6, sin horario de verano.) Los grupos sin hora aquí cuentan siempre.
+var KICKOFF_R3 = {
+  // 24 jun — Grupo B (13:00 CDMX = 19:00 UTC)
+  "Canada vs Suiza": Date.UTC(2026,5,24,19,0), "Bosnia y Herzegovina vs Catar": Date.UTC(2026,5,24,19,0),
+  // 24 jun — Grupo C (16:00 CDMX = 22:00 UTC)
+  "Brasil vs Escocia": Date.UTC(2026,5,24,22,0), "Marruecos vs Haiti": Date.UTC(2026,5,24,22,0),
+  // 24 jun — Grupo A (19:00 CDMX = 01:00 UTC del 25)
+  "Mexico vs Chequia": Date.UTC(2026,5,25,1,0), "Corea del Sur vs Sudafrica": Date.UTC(2026,5,25,1,0),
+  // La goleada se "cierra" con el primer partido de la J3
+  "Habra una goleada (3+ goles de diferencia) en la jornada 3?": Date.UTC(2026,5,24,19,0),
+  // 25 jun — Grupo E (14:00 CDMX = 20:00 UTC)
+  "Alemania vs Ecuador": Date.UTC(2026,5,25,20,0), "Costa de Marfil vs Curazao": Date.UTC(2026,5,25,20,0),
+  // 25 jun — Grupo F (17:00 CDMX = 23:00 UTC)
+  "Paises Bajos vs Tunez": Date.UTC(2026,5,25,23,0), "Suecia vs Japon": Date.UTC(2026,5,25,23,0),
+  // 25 jun — Grupo D (20:00 CDMX = 02:00 UTC del 26)
+  "Estados Unidos vs Turquia": Date.UTC(2026,5,26,2,0), "Australia vs Paraguay": Date.UTC(2026,5,26,2,0)
+};
+// Parsea la marca de tiempo del CSV (formato gviz "Date(Y,M,D,h,m,s)" con mes 0-indexado,
+// o formatos de texto comunes). El reloj viene en CDMX (UTC-6) → se convierte a UTC.
+function parseStamp(s){
+  if(!s) return null;
+  s=String(s).trim();
+  var m=s.match(/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/);
+  if(m){ return Date.UTC(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)) + 6*36e5; }
+  var d=s.match(/(\d{1,4})[\/\-](\d{1,2})[\/\-](\d{1,4})[ ,T]+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if(d){ var a=+d[1],b=+d[2],c=+d[3],Y,Mo,D;
+    if(a>31){ Y=a; Mo=b-1; D=c; } else { Mo=a-1; D=b; Y=c; }
+    return Date.UTC(Y,Mo,D,+d[4],+d[5],+(d[6]||0)) + 6*36e5; }
+  return null;
+}
 
 function parseCSV(text){
   var rows=[], row=[], cell="", q=false, i, c;
@@ -349,16 +382,17 @@ function fmtResult(key, val, SCORES, NICE){
   return ((NICE&&NICE[val])||val) + (sc ? " "+sc : "");
 }
 
-function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES){
+function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES, KICKOFF){
   var out={map:{}, captured:Object.keys(RES).filter(function(k){return RES[k]!==null;}), total:Object.keys(RES).length};
   if(!rows || !rows.length) return out;
   var headers = rows[0].map(function(h){return h.trim();});
-  var idxName = -1;
-  headers.forEach(function(h,i){ if(norm(h)==="nombre completo") idxName=i; });
+  var idxName = -1, idxStamp = -1;
+  headers.forEach(function(h,i){ var n=norm(h); if(n==="nombre completo") idxName=i; if(n==="marca temporal"||n==="timestamp") idxStamp=i; });
   if(idxName<0) return out;
   rows.slice(1).forEach(function(r){
     var name=(r[idxName]||"").trim();
     if(!name || norm(name).indexOf("prueba")>=0) return;
+    var stamp = (KICKOFF && idxStamp>=0) ? parseStamp(r[idxStamp]) : null;
     var pts=0, hits=0, detail=[];
     out.captured.forEach(function(key){
       var i=headers.indexOf(key);
@@ -366,13 +400,15 @@ function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES){
       var ans=norm(pickRaw), res=norm(RES[key]), ok;
       if(key===GOLEADOR_KEY){ ok = ans!=="" && (ans.indexOf(res)>=0 || res.indexOf(ans)>=0); }
       else { ok = (ans===res); }
-      var earned = ok ? PTS[key] : 0;
-      if(ok){ pts+=earned; hits++; }
+      // "tarde": el participante envió después (o al) inicio del partido → no cuenta para él.
+      var late = !!(KICKOFF && KICKOFF[key] && stamp!=null && stamp >= KICKOFF[key]);
+      var earned = (ok && !late) ? PTS[key] : 0;
+      if(ok && !late){ pts+=earned; hits++; }
       detail.push({
         label: SHORT[key] || ("⚽ "+key),
         res: fmtResult(key, RES[key], SCORES, NICE),
         pick: pickRaw ? ((NICE&&NICE[pickRaw])||pickRaw) : "—",
-        ok: ok, pts: earned
+        ok: ok, pts: earned, late: late
       });
     });
     var ckey = canonKey(name);
@@ -407,7 +443,7 @@ function main(){
     var r1 = scoreRound(rows1, RESULTS, PTS, SHORT, NICE, SCORES);
     var r2 = scoreRound(rows2, RESULTS_R2, PTS_R2, SHORT_R2, NICE_R2, SCORES_R2);
     var r3 = scoreRound(rows3, RESULTS_R2C, PTS_R2C, SHORT_R2C, NICE_R2C, SCORES_R2C);
-    var r4 = scoreRound(rows4, RESULTS_R3, PTS_R3, SHORT_R3, NICE_R3, SCORES_R3);
+    var r4 = scoreRound(rows4, RESULTS_R3, PTS_R3, SHORT_R3, NICE_R3, SCORES_R3, KICKOFF_R3);
     var names={};
     Object.keys(r1.map).forEach(function(k){names[k]=1;});
     Object.keys(r2.map).forEach(function(k){names[k]=1;});
@@ -430,11 +466,14 @@ function main(){
       var rank = (p.pts===lastPts)? lastRank : i+1;
       lastPts=p.pts; lastRank=rank;
       var bd = (p.detail||[]).map(function(d){
-        return '<div class="bd '+(d.ok?"":"miss")+'">'
-          + '<span class="ic">'+(d.ok?"✅":"❌")+'</span>'
+        var counts = d.ok && !d.late;
+        var ic = d.late ? "🚫" : (d.ok?"✅":"❌");
+        var note = d.late ? ' · <span style="color:var(--gold)">⏰ no cuenta (enviaste tarde)</span>' : '';
+        return '<div class="bd '+(counts?"":"miss")+'">'
+          + '<span class="ic">'+ic+'</span>'
           + '<div class="bdtext"><div class="bdl">'+d.label+'</div>'
-          + '<div class="bds">'+d.res+' · tú: '+d.pick+'</div></div>'
-          + '<span class="pp">'+(d.ok?("+"+d.pts):"0")+'</span></div>';
+          + '<div class="bds">'+d.res+' · tú: '+d.pick+note+'</div></div>'
+          + '<span class="pp">'+(counts?("+"+d.pts):"0")+'</span></div>';
       }).join('');
       if(!bd) bd='<div class="bdempty">Aún no hay resultados capturados.</div>';
       html += '<div class="row p'+rank+'">'
