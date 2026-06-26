@@ -30,53 +30,51 @@ la web y capturarlo en `tabla.html` para que las posiciones se recalculen solas.
 1. Revisa qué partidos de la lista de abajo siguen en `null` y ya deberían haber terminado.
 2. Busca en la web el **marcador final** de cada uno (ESPN, Olympics.com, ClaroSports,
    El Tiempo, etc. — verifica con 2 fuentes si hay duda).
-3. En `tabla.html` edita:
-   - **`RESULTS` / `RESULTS_R2` / `RESULTS_R2C`**: cambia el `null` por el **ganador**
-     o `"Empate"`. El texto debe coincidir EXACTO con la opción del Google Form:
-     **Ronda 1 con acentos, Ronda 2 y Complemento SIN acentos.** (La calificación
-     ignora acentos/mayúsculas, pero respeta el formato por claridad.)
-   - **`SCORES` / `SCORES_R2` / `SCORES_R2C`**: agrega el marcador `"L-V"` con los
-     goles en el **orden de la clave** (local primero, visitante después). Ej.: para
-     la clave `"Escocia vs Marruecos"` que terminó 0-1 a favor de Marruecos, pon `"0-1"`.
-4. **Goleada de la jornada 2** (clave `"Habra una goleada (3+ goles de diferencia) en la jornada 2?"`
-   en `RESULTS_R2`): vale `"Si"` en cuanto algún partido de J2 tenga **3+ goles de
-   diferencia**; si no, `"No"` cuando la jornada termine. (Ya está en `"Si"`.)
-5. Haz **commit y push directo a `main`** (Vercel despliega solo). **No abras PR.**
-6. En el commit resume lo capturado, ej.: `Capturar J2 20 jun: Alemania X-Y C.Marfil, ...`
+3. En `tabla.html` edita (la **Ronda 3 / J3 es lo único pendiente** ahora):
+   - **`RESULTS_R3`**: cambia el `null` por el **ganador** o `"Empate"`. Texto SIN acentos,
+     EXACTO como la clave (la calificación ignora acentos/mayúsculas, pero respeta el formato).
+   - **`SCORES_R3`**: agrega el marcador `"L-V"` con los goles en el **orden de la clave**
+     (local primero). Ej.: clave `"Corea del Sur vs Sudafrica"` que ganó Sudáfrica 1-0 → `"0-1"`.
+4. **Goleada de la jornada 3** (clave `"Habra una goleada (3+ goles de diferencia) en la jornada 3?"`
+   en `RESULTS_R3`): vale `"Si"` en cuanto algún partido de J3 tenga **3+ goles de diferencia**.
+   (Ya está en `"Si"` por Brasil 3-0 Escocia.)
+5. ⚠️ **NO toques** `KICKOFF_R3`, `parseStamp` ni la lógica de marca de tiempo: ya están
+   completos para los 24 partidos y son los que hacen justo el conteo por participante
+   (a quien envía tarde no le suman los partidos ya jugados). Solo llenas `RESULTS_R3`/`SCORES_R3`.
+6. Haz **commit y push directo a `main`** (Vercel despliega solo). **No abras PR.**
+7. En el commit resume lo capturado, ej.: `Capturar J3 26 jun: Francia X-Y Noruega, ...`
 
-## 🗓️ Partidos pendientes de la Jornada 2 (claves exactas)
+## 🗓️ Partidos pendientes de la Jornada 3 (claves exactas en `RESULTS_R3`)
 
-> Horarios aproximados (CDMX/ET) — **verifica en la web** la hora y el estado real.
-> Cuando todos estos queden capturados, la J2 está completa.
+> **Ronda 1 y Ronda 2 están COMPLETAS** — no las toques. Lo único por capturar es la J3.
+> Horarios CDMX (verifica en la web el estado real; captura ~30 min tras finalizar).
 
-### Ronda 2 — objeto `RESULTS_R2` (marcador en `SCORES_R2`)
-| Clave en el código | Fecha aprox. |
+### 26 jun
+| Clave en el código | Hora aprox. |
 |---|---|
-| `Alemania vs Costa de Marfil` | sáb 20 jun |
-| `Paises Bajos vs Suecia` | sáb 20 jun |
-| `Espana vs Arabia Saudita` | dom 21 jun |
-| `Belgica vs Iran` | dom 21 jun |
-| `Francia vs Irak` | lun 22 jun |
-| `Argentina vs Austria` | lun 22 jun |
-| `Portugal vs Uzbekistan` | mar 23 jun |
-| `Inglaterra vs Ghana` | mar 23 jun |
+| `Francia vs Noruega` | 1:00 pm |
+| `Irak vs Senegal` | 1:00 pm |
+| `Espana vs Uruguay` | 6:00 pm |
+| `Cabo Verde vs Arabia Saudita` | 6:00 pm |
+| `Belgica vs Nueva Zelanda` | 9:00 pm |
+| `Egipto vs Iran` | 9:00 pm |
 
-### Ronda 2 Complemento — objeto `RESULTS_R2C` (marcador en `SCORES_R2C`)
-| Clave en el código | Fecha aprox. |
+### 27 jun
+| Clave en el código | Hora aprox. |
 |---|---|
-| `Ecuador vs Curazao` | sáb 20 jun |
-| `Tunez vs Japon` | sáb 20 / dom 21 jun (verificar) |
-| `Uruguay vs Cabo Verde` | dom 21 jun |
-| `Nueva Zelanda vs Egipto` | dom 21 jun |
-| `Noruega vs Senegal` | lun 22 jun |
-| `Jordania vs Argelia` | lun 22 jun |
-| `Panama vs Croacia` | mar 23 jun |
-| `Colombia vs RD del Congo` | mar 23 jun |
+| `Inglaterra vs Panama` | 3:00 pm |
+| `Croacia vs Ghana` | 3:00 pm |
+| `Portugal vs Colombia` | 5:30 pm |
+| `RD del Congo vs Uzbekistan` | 5:30 pm |
+| `Argentina vs Jordania` | 8:00 pm |
+| `Argelia vs Austria` | 8:00 pm |
 
-### ✅ Ya capturados (no tocar)
-J1 completa (Ronda 1). De J2: México 1-0 Corea, Canadá 6-0 Catar, Chequia 1-1 Sudáfrica,
-Suiza 4-1 Bosnia, USA 2-0 Australia, Brasil 3-0 Haití, Marruecos 1-0 Escocia,
-Paraguay 1-0 Turquía, y goleada J2 = `"Si"`.
+### ✅ Ya capturados de la J3 (no tocar)
+24 jun: México 3-0 Chequia, Sudáfrica 1-0 Corea, Suiza 2-1 Canadá, Bosnia 3-1 Catar,
+Brasil 3-0 Escocia; goleada J3 = `"Si"`. (Marruecos–Haití del 24 jun: capturar si falta.)
+25 jun: Grupos D/E/F (`Estados Unidos vs Turquia`, `Alemania vs Ecuador`,
+`Paises Bajos vs Tunez`, `Suecia vs Japon`, `Australia vs Paraguay`,
+`Costa de Marfil vs Curazao`) — capturar conforme se jueguen.
 
 ## 🏆 Premios de fin de torneo (Ronda 1 — solo al final)
 Estas claves en `RESULTS` se quedan en `null` hasta que el torneo defina:
