@@ -116,9 +116,9 @@ input:focus{outline:2px solid var(--green);border-color:var(--green)}
 /* ============================================================================
    CONFIGURACIÓN — llenar con la salida del script APPS-SCRIPT-RONDA4.gs y poner READY=true.
    ========================================================================== */
-const READY = false;
-const FORM_URL = "https://docs.google.com/forms/d/e/PENDIENTE/formResponse";
-const E_NOMBRE = "";   // entry ID del "Nombre completo"
+const READY = true;
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdNpj2YGbVaCpLCjLm10NDE1eIwxaSvO6mkU3jONoIz88h0bg/formResponse";
+const E_NOMBRE = "455701023";   // entry ID del "Nombre completo"
 const DEADLINE = new Date("2026-07-04T06:00:00Z"); // abierta toda la ronda; validez por marca de tiempo (KICKOFF_R4 en tabla.html)
 
 const FLAG = {mx:"mx",cz:"cz",kr:"kr",za:"za",ca:"ca",ch:"ch",ba:"ba",qa:"qa",sct:"gb-sct",br:"br",ma:"ma",ht:"ht",tr:"tr",us:"us",py:"py",au:"au",de:"de",ec:"ec",ci:"ci",cw:"cw",nl:"nl",tn:"tn",se:"se",jp:"jp",nz:"nz",be:"be",eg:"eg",ir:"ir",uy:"uy",es:"es",cv:"cv",sa:"sa",no:"no",fr:"fr",sn:"sn",iq:"iq",jo:"jo",ar:"ar",dz:"dz",at:"at",co:"co",pt:"pt",cd:"cd",uz:"uz",pa:"pa",eng:"gb-eng",hr:"hr",gh:"gh"};
@@ -128,22 +128,22 @@ function emoji(code){var c=FLAG[code]; if(c==="gb-eng")return "🏴󠁧󠁢󠁥�
 // Cada llave: id estable · e=entry ID Google (llenar) · cap=fecha · equipo A · equipo B.
 // El TÍTULO de la pregunta en el Form debe ser EXACTO "<a.v> vs <b.v>".
 const MATCHES = [
- {id:"M1",  e:"", cap:"Dom 28 jun", a:{d:"Sudáfrica",v:"Sudafrica",f:"za"},          b:{d:"Canadá",v:"Canada",f:"ca"}},
- {id:"M2",  e:"", cap:"Lun 29 jun", a:{d:"Brasil",v:"Brasil",f:"br"},                b:{d:"Japón",v:"Japon",f:"jp"}},
- {id:"M3",  e:"", cap:"Lun 29 jun", a:{d:"Alemania",v:"Alemania",f:"de"},            b:{d:"Paraguay",v:"Paraguay",f:"py"}},
- {id:"M4",  e:"", cap:"Lun 29 jun", a:{d:"Países Bajos",v:"Paises Bajos",f:"nl"},    b:{d:"Marruecos",v:"Marruecos",f:"ma"}},
- {id:"M5",  e:"", cap:"Mar 30 jun", a:{d:"Costa de Marfil",v:"Costa de Marfil",f:"ci"}, b:{d:"Noruega",v:"Noruega",f:"no"}},
- {id:"M6",  e:"", cap:"Mar 30 jun", a:{d:"Francia",v:"Francia",f:"fr"},              b:{d:"Suecia",v:"Suecia",f:"se"}},
- {id:"M7",  e:"", cap:"Mar 30 jun", a:{d:"México",v:"Mexico",f:"mx"},                b:{d:"Ecuador",v:"Ecuador",f:"ec"}},
- {id:"M8",  e:"", cap:"Mié 1 jul",  a:{d:"Inglaterra",v:"Inglaterra",f:"eng"},       b:{d:"RD del Congo",v:"RD del Congo",f:"cd"}},
- {id:"M9",  e:"", cap:"Mié 1 jul",  a:{d:"Bélgica",v:"Belgica",f:"be"},              b:{d:"Senegal",v:"Senegal",f:"sn"}},
- {id:"M10", e:"", cap:"Mié 1 jul",  a:{d:"Estados Unidos",v:"Estados Unidos",f:"us"}, b:{d:"Bosnia y Herzeg.",v:"Bosnia y Herzegovina",f:"ba"}},
- {id:"M11", e:"", cap:"Jue 2 jul",  a:{d:"España",v:"Espana",f:"es"},                b:{d:"Austria",v:"Austria",f:"at"}},
- {id:"M12", e:"", cap:"Jue 2 jul",  a:{d:"Portugal",v:"Portugal",f:"pt"},            b:{d:"Croacia",v:"Croacia",f:"hr"}},
- {id:"M13", e:"", cap:"Jue 2 jul",  a:{d:"Suiza",v:"Suiza",f:"ch"},                  b:{d:"Argelia",v:"Argelia",f:"dz"}},
- {id:"M14", e:"", cap:"Vie 3 jul",  a:{d:"Australia",v:"Australia",f:"au"},          b:{d:"Egipto",v:"Egipto",f:"eg"}},
- {id:"M15", e:"", cap:"Vie 3 jul",  a:{d:"Argentina",v:"Argentina",f:"ar"},          b:{d:"Cabo Verde",v:"Cabo Verde",f:"cv"}},
- {id:"M16", e:"", cap:"Vie 3 jul",  a:{d:"Colombia",v:"Colombia",f:"co"},            b:{d:"Ghana",v:"Ghana",f:"gh"}}
+ {id:"M1",  e:"958602195",  cap:"Dom 28 jun", a:{d:"Sudáfrica",v:"Sudafrica",f:"za"},          b:{d:"Canadá",v:"Canada",f:"ca"}},
+ {id:"M2",  e:"2036916945", cap:"Lun 29 jun", a:{d:"Brasil",v:"Brasil",f:"br"},                b:{d:"Japón",v:"Japon",f:"jp"}},
+ {id:"M3",  e:"244084486",  cap:"Lun 29 jun", a:{d:"Alemania",v:"Alemania",f:"de"},            b:{d:"Paraguay",v:"Paraguay",f:"py"}},
+ {id:"M4",  e:"784037047",  cap:"Lun 29 jun", a:{d:"Países Bajos",v:"Paises Bajos",f:"nl"},    b:{d:"Marruecos",v:"Marruecos",f:"ma"}},
+ {id:"M5",  e:"1827780195", cap:"Mar 30 jun", a:{d:"Costa de Marfil",v:"Costa de Marfil",f:"ci"}, b:{d:"Noruega",v:"Noruega",f:"no"}},
+ {id:"M6",  e:"626116829",  cap:"Mar 30 jun", a:{d:"Francia",v:"Francia",f:"fr"},              b:{d:"Suecia",v:"Suecia",f:"se"}},
+ {id:"M7",  e:"1895372870", cap:"Mar 30 jun", a:{d:"México",v:"Mexico",f:"mx"},                b:{d:"Ecuador",v:"Ecuador",f:"ec"}},
+ {id:"M8",  e:"96627432",   cap:"Mié 1 jul",  a:{d:"Inglaterra",v:"Inglaterra",f:"eng"},       b:{d:"RD del Congo",v:"RD del Congo",f:"cd"}},
+ {id:"M9",  e:"1949416211", cap:"Mié 1 jul",  a:{d:"Bélgica",v:"Belgica",f:"be"},              b:{d:"Senegal",v:"Senegal",f:"sn"}},
+ {id:"M10", e:"782861188",  cap:"Mié 1 jul",  a:{d:"Estados Unidos",v:"Estados Unidos",f:"us"}, b:{d:"Bosnia y Herzeg.",v:"Bosnia y Herzegovina",f:"ba"}},
+ {id:"M11", e:"237553918",  cap:"Jue 2 jul",  a:{d:"España",v:"Espana",f:"es"},                b:{d:"Austria",v:"Austria",f:"at"}},
+ {id:"M12", e:"351482762",  cap:"Jue 2 jul",  a:{d:"Portugal",v:"Portugal",f:"pt"},            b:{d:"Croacia",v:"Croacia",f:"hr"}},
+ {id:"M13", e:"1506142816", cap:"Jue 2 jul",  a:{d:"Suiza",v:"Suiza",f:"ch"},                  b:{d:"Argelia",v:"Argelia",f:"dz"}},
+ {id:"M14", e:"617793302",  cap:"Vie 3 jul",  a:{d:"Australia",v:"Australia",f:"au"},          b:{d:"Egipto",v:"Egipto",f:"eg"}},
+ {id:"M15", e:"1416511330", cap:"Vie 3 jul",  a:{d:"Argentina",v:"Argentina",f:"ar"},          b:{d:"Cabo Verde",v:"Cabo Verde",f:"cv"}},
+ {id:"M16", e:"422906436",  cap:"Vie 3 jul",  a:{d:"Colombia",v:"Colombia",f:"co"},            b:{d:"Ghana",v:"Ghana",f:"gh"}}
 ];
 
 const answers = {};
