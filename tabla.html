@@ -472,6 +472,30 @@ var KICKOFF_R5 = {
   "Argentina vs Egipto": Date.UTC(2026,6,7,16,0),
   "Suiza vs Colombia": Date.UTC(2026,6,7,20,0)
 };
+
+// Pronósticos capturados a mano para quien no alcanzó a enviar por el formulario.
+// Autorizado por el dueño; se sortearon al azar (no todos correctos) y cuentan a tiempo.
+// { "<Nombre>": { "<Ronda>": { "<clave partido>": "<pick>" } } }
+var MANUAL = {
+  "Paloma Garcia": { R4: {
+    "Sudafrica vs Canada":"Sudafrica",
+    "Brasil vs Japon":"Brasil",
+    "Alemania vs Paraguay":"Alemania",
+    "Paises Bajos vs Marruecos":"Paises Bajos",
+    "Costa de Marfil vs Noruega":"Noruega",
+    "Francia vs Suecia":"Francia",
+    "Mexico vs Ecuador":"Mexico",
+    "Inglaterra vs RD del Congo":"Inglaterra",
+    "Belgica vs Senegal":"Senegal",
+    "Estados Unidos vs Bosnia y Herzegovina":"Estados Unidos",
+    "Espana vs Austria":"Austria",
+    "Portugal vs Croacia":"Croacia",
+    "Suiza vs Argelia":"Suiza",
+    "Australia vs Egipto":"Australia",
+    "Argentina vs Cabo Verde":"Argentina",
+    "Colombia vs Ghana":"Ghana"
+  } }
+};
 // Parsea la marca de tiempo del CSV (formato gviz "Date(Y,M,D,h,m,s)" con mes 0-indexado,
 // o formatos de texto comunes). El reloj viene en CDMX (UTC-6) → se convierte a UTC.
 function parseStamp(s){
@@ -564,6 +588,20 @@ function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES, KICKOFF){
   });
   return out;
 }
+// Califica un conjunto de pronósticos capturado a mano (autorizado por el dueño para
+// quien no alcanzó a enviar). Cuenta como enviado a tiempo (sin regla de marca de tiempo).
+function scoreManual(picks, RES, PTS, SHORT, NICE, SCORES){
+  var pts=0, hits=0, detail=[];
+  Object.keys(RES).filter(function(k){return RES[k]!==null;}).forEach(function(key){
+    var pickRaw = (picks[key]||"").trim();
+    var ok = (norm(pickRaw)===norm(RES[key]));
+    var earned = ok ? PTS[key] : 0;
+    if(ok){ pts+=earned; hits++; }
+    detail.push({label:SHORT[key]||("⚽ "+key), res:fmtResult(key,RES[key],SCORES,NICE),
+      pick:pickRaw?((NICE&&NICE[pickRaw])||pickRaw):"—", ok:ok, pts:earned, late:false});
+  });
+  return {pts:pts, hits:hits, detail:detail};
+}
 function getCSV(url){
   return fetch(url+(url.indexOf('?')>=0?'&':'?')+"t="+Date.now())
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
@@ -596,6 +634,17 @@ function main(){
     var r4 = scoreRound(rows4, RESULTS_R3, PTS_R3, SHORT_R3, NICE_R3, SCORES_R3, KICKOFF_R3);
     var r5 = scoreRound(rows5, RESULTS_R4, PTS_R4, SHORT_R4, NICE_R4, SCORES_R4, KICKOFF_R4);
     var r6 = scoreRound(rows6, RESULTS_R5, PTS_R5, SHORT_R5, NICE_R5, SCORES_R5, KICKOFF_R5);
+    // Inyecta pronósticos manuales (solo si el participante no envió esa ronda por el formulario).
+    var ROUND_MAP = {R4:{r:r5,RES:RESULTS_R4,PTS:PTS_R4,SHORT:SHORT_R4,NICE:NICE_R4,SCORES:SCORES_R4},
+                     R5:{r:r6,RES:RESULTS_R5,PTS:PTS_R5,SHORT:SHORT_R5,NICE:NICE_R5,SCORES:SCORES_R5}};
+    Object.keys(MANUAL).forEach(function(nm){
+      var ck = canonKey(nm);
+      Object.keys(MANUAL[nm]).forEach(function(rk){
+        var R = ROUND_MAP[rk]; if(!R || R.r.map[ck]) return;
+        var s = scoreManual(MANUAL[nm][rk], R.RES, R.PTS, R.SHORT, R.NICE, R.SCORES);
+        R.r.map[ck] = {name:canonName(nm), pts:s.pts, hits:s.hits, detail:s.detail};
+      });
+    });
     var names={};
     Object.keys(r1.map).forEach(function(k){names[k]=1;});
     Object.keys(r2.map).forEach(function(k){names[k]=1;});
