@@ -115,9 +115,9 @@ input:focus{outline:2px solid var(--green);border-color:var(--green)}
 /* ============================================================================
    CONFIGURACIÓN — llenar con la salida del script APPS-SCRIPT-RONDA5.gs y poner READY=true.
    ========================================================================== */
-const READY = false;
-const FORM_URL = "https://docs.google.com/forms/d/e/PENDIENTE/formResponse";
-const E_NOMBRE = "";   // entry ID del "Nombre completo"
+const READY = true;
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScD1-QIYVb3TiGNQHt93cK7FKZ5saZqZm6FKc0G9fPWblpqA/formResponse";
+const E_NOMBRE = "1120922258";   // entry ID del "Nombre completo"
 const DEADLINE = new Date("2026-07-08T06:00:00Z"); // abierta toda la ronda; validez por marca de tiempo (KICKOFF_R5 en tabla.html)
 
 const FLAG = {mx:"mx",cz:"cz",kr:"kr",za:"za",ca:"ca",ch:"ch",ba:"ba",qa:"qa",sct:"gb-sct",br:"br",ma:"ma",ht:"ht",tr:"tr",us:"us",py:"py",au:"au",de:"de",ec:"ec",ci:"ci",cw:"cw",nl:"nl",tn:"tn",se:"se",jp:"jp",nz:"nz",be:"be",eg:"eg",ir:"ir",uy:"uy",es:"es",cv:"cv",sa:"sa",no:"no",fr:"fr",sn:"sn",iq:"iq",jo:"jo",ar:"ar",dz:"dz",at:"at",co:"co",pt:"pt",cd:"cd",uz:"uz",pa:"pa",eng:"gb-eng",hr:"hr",gh:"gh"};
@@ -127,14 +127,14 @@ function emoji(code){var c=FLAG[code]; if(c==="gb-eng")return "🏴󠁧󠁢󠁥�
 // Cada llave: id · e=entry ID Google (llenar) · cap=fecha · equipo A · equipo B.
 // El TÍTULO de la pregunta en el Form debe ser EXACTO "<a.v> vs <b.v>".
 const MATCHES = [
- {id:"O1", e:"", cap:"Sáb 4 jul", a:{d:"Paraguay",v:"Paraguay",f:"py"},              b:{d:"Francia",v:"Francia",f:"fr"}},
- {id:"O2", e:"", cap:"Sáb 4 jul", a:{d:"Canadá",v:"Canada",f:"ca"},                  b:{d:"Marruecos",v:"Marruecos",f:"ma"}},
- {id:"O3", e:"", cap:"Dom 5 jul", a:{d:"Brasil",v:"Brasil",f:"br"},                  b:{d:"Noruega",v:"Noruega",f:"no"}},
- {id:"O4", e:"", cap:"Dom 5 jul", a:{d:"México",v:"Mexico",f:"mx"},                  b:{d:"Inglaterra",v:"Inglaterra",f:"eng"}},
- {id:"O5", e:"", cap:"Lun 6 jul", a:{d:"Portugal",v:"Portugal",f:"pt"},              b:{d:"España",v:"Espana",f:"es"}},
- {id:"O6", e:"", cap:"Lun 6 jul", a:{d:"Estados Unidos",v:"Estados Unidos",f:"us"},  b:{d:"Bélgica",v:"Belgica",f:"be"}},
- {id:"O7", e:"", cap:"Mar 7 jul", a:{d:"Argentina",v:"Argentina",f:"ar"},            b:{d:"Egipto",v:"Egipto",f:"eg"}},
- {id:"O8", e:"", cap:"Mar 7 jul", a:{d:"Suiza",v:"Suiza",f:"ch"},                    b:{d:"Colombia",v:"Colombia",f:"co"}}
+ {id:"O1", e:"1234339901", cap:"Sáb 4 jul", a:{d:"Paraguay",v:"Paraguay",f:"py"},              b:{d:"Francia",v:"Francia",f:"fr"}},
+ {id:"O2", e:"1903914732", cap:"Sáb 4 jul", a:{d:"Canadá",v:"Canada",f:"ca"},                  b:{d:"Marruecos",v:"Marruecos",f:"ma"}},
+ {id:"O3", e:"192364879",  cap:"Dom 5 jul", a:{d:"Brasil",v:"Brasil",f:"br"},                  b:{d:"Noruega",v:"Noruega",f:"no"}},
+ {id:"O4", e:"643617416",  cap:"Dom 5 jul", a:{d:"México",v:"Mexico",f:"mx"},                  b:{d:"Inglaterra",v:"Inglaterra",f:"eng"}},
+ {id:"O5", e:"1736022837", cap:"Lun 6 jul", a:{d:"Portugal",v:"Portugal",f:"pt"},              b:{d:"España",v:"Espana",f:"es"}},
+ {id:"O6", e:"583334875",  cap:"Lun 6 jul", a:{d:"Estados Unidos",v:"Estados Unidos",f:"us"},  b:{d:"Bélgica",v:"Belgica",f:"be"}},
+ {id:"O7", e:"283434035",  cap:"Mar 7 jul", a:{d:"Argentina",v:"Argentina",f:"ar"},            b:{d:"Egipto",v:"Egipto",f:"eg"}},
+ {id:"O8", e:"1510938455", cap:"Mar 7 jul", a:{d:"Suiza",v:"Suiza",f:"ch"},                    b:{d:"Colombia",v:"Colombia",f:"co"}}
 ];
 
 const answers = {};
