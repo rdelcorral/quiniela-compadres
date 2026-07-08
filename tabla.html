@@ -94,8 +94,10 @@ h1 .gold{color:var(--gold)}
     <div class="rgrid" id="rgrid4"></div>
     <div class="rsub">🏅 Ronda 5 · Octavos</div>
     <div class="rgrid" id="rgrid5"></div>
+    <div class="rsub">🏆 Ronda 6 · Cuartos</div>
+    <div class="rgrid" id="rgrid6"></div>
   </div>
-  <div class="foot">Suma Ronda 1 + 2 + 3 + 4 + 5 · se actualiza al abrir la página.<br><a href="/ronda5">🏅 Jugar la Ronda 5 (Octavos)</a> · <a href="/">← Volver a la quiniela</a></div>
+  <div class="foot">Suma Ronda 1 + 2 + 3 + 4 + 5 + 6 · se actualiza al abrir la página.<br><a href="/ronda6">🏆 Jugar la Ronda 6 (Cuartos)</a> · <a href="/">← Volver a la quiniela</a></div>
 </div>
 
 <script>
@@ -482,6 +484,28 @@ var KICKOFF_R5 = {
   "Suiza vs Colombia": Date.UTC(2026,6,7,20,0)
 };
 
+// ===== RONDA 6 (Cuartos de final) — formato "quién avanza" =====
+var CSV_URL_R6 = "https://docs.google.com/spreadsheets/d/1RlubJUash2lZB4INvxwbNGyHfyg5Y-ZulHX9wavOGP8/gviz/tq?tqx=out:csv";
+var RESULTS_R6 = {
+  "Francia vs Marruecos": null,
+  "Espana vs Belgica": null,
+  "Noruega vs Inglaterra": null,
+  "Argentina vs Suiza": null
+};
+var SCORES_R6 = {};
+var PTS_R6 = {"Francia vs Marruecos":3,"Espana vs Belgica":3,"Noruega vs Inglaterra":3,"Argentina vs Suiza":3};
+var SHORT_R6 = {
+  "Francia vs Marruecos":"🏆 Francia vs Marruecos","Espana vs Belgica":"🏆 España vs Bélgica",
+  "Noruega vs Inglaterra":"🏆 Noruega vs Inglaterra","Argentina vs Suiza":"🏆 Argentina vs Suiza"
+};
+var NICE_R6 = {"Espana":"España","Belgica":"Bélgica"};
+var KICKOFF_R6 = {
+  "Francia vs Marruecos": Date.UTC(2026,6,9,20,0),
+  "Espana vs Belgica": Date.UTC(2026,6,10,19,0),
+  "Noruega vs Inglaterra": Date.UTC(2026,6,11,21,0),
+  "Argentina vs Suiza": Date.UTC(2026,6,12,1,0)
+};
+
 // Pronósticos capturados a mano para quien no alcanzó a enviar por el formulario.
 // Autorizado por el dueño; se sortearon al azar (no todos correctos) y cuentan a tiempo.
 // { "<Nombre>": { "<Ronda>": { "<clave partido>": "<pick>" } } }
@@ -712,19 +736,22 @@ function main(){
     getCSV(CSV_URL_R2C).catch(function(){return null;}),
     getCSV(CSV_URL_R3).catch(function(){return null;}),
     getCSV(CSV_URL_R4).catch(function(){return null;}),
-    getCSV(CSV_URL_R5).catch(function(){return null;})
+    getCSV(CSV_URL_R5).catch(function(){return null;}),
+    getCSV(CSV_URL_R6).catch(function(){return null;})
   ]).then(function(res){
-    var rows1=res[0], rows2=res[1], rows3=res[2], rows4=res[3], rows5=res[4], rows6=res[5];
-    if(!rows1 && !rows2 && !rows3 && !rows4 && !rows5 && !rows6) throw new Error("sin datos");
+    var rows1=res[0], rows2=res[1], rows3=res[2], rows4=res[3], rows5=res[4], rows6=res[5], rows7=res[6];
+    if(!rows1 && !rows2 && !rows3 && !rows4 && !rows5 && !rows6 && !rows7) throw new Error("sin datos");
     var r1 = scoreRound(rows1, RESULTS, PTS, SHORT, NICE, SCORES);
     var r2 = scoreRound(rows2, RESULTS_R2, PTS_R2, SHORT_R2, NICE_R2, SCORES_R2);
     var r3 = scoreRound(rows3, RESULTS_R2C, PTS_R2C, SHORT_R2C, NICE_R2C, SCORES_R2C);
     var r4 = scoreRound(rows4, RESULTS_R3, PTS_R3, SHORT_R3, NICE_R3, SCORES_R3, KICKOFF_R3);
     var r5 = scoreRound(rows5, RESULTS_R4, PTS_R4, SHORT_R4, NICE_R4, SCORES_R4, KICKOFF_R4);
     var r6 = scoreRound(rows6, RESULTS_R5, PTS_R5, SHORT_R5, NICE_R5, SCORES_R5, KICKOFF_R5);
+    var r7 = scoreRound(rows7, RESULTS_R6, PTS_R6, SHORT_R6, NICE_R6, SCORES_R6, KICKOFF_R6);
     // Inyecta pronósticos manuales (solo si el participante no envió esa ronda por el formulario).
     var ROUND_MAP = {R4:{r:r5,RES:RESULTS_R4,PTS:PTS_R4,SHORT:SHORT_R4,NICE:NICE_R4,SCORES:SCORES_R4},
-                     R5:{r:r6,RES:RESULTS_R5,PTS:PTS_R5,SHORT:SHORT_R5,NICE:NICE_R5,SCORES:SCORES_R5}};
+                     R5:{r:r6,RES:RESULTS_R5,PTS:PTS_R5,SHORT:SHORT_R5,NICE:NICE_R5,SCORES:SCORES_R5},
+                     R6:{r:r7,RES:RESULTS_R6,PTS:PTS_R6,SHORT:SHORT_R6,NICE:NICE_R6,SCORES:SCORES_R6}};
     Object.keys(MANUAL).forEach(function(nm){
       var ck = canonKey(nm);
       Object.keys(MANUAL[nm]).forEach(function(rk){
@@ -740,14 +767,15 @@ function main(){
     Object.keys(r4.map).forEach(function(k){names[k]=1;});
     Object.keys(r5.map).forEach(function(k){names[k]=1;});
     Object.keys(r6.map).forEach(function(k){names[k]=1;});
+    Object.keys(r7.map).forEach(function(k){names[k]=1;});
     var players = Object.keys(names).map(function(k){
-      var a=r1.map[k], b=r2.map[k], c=r3.map[k], d=r4.map[k], e=r5.map[k], g=r6.map[k];
-      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name)||(d&&d.name)||(e&&e.name)||(g&&g.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0)+(e?e.pts:0)+(g?g.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0)+(d?d.hits:0)+(e?e.hits:0)+(g?g.hits:0),
-              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[]).concat(d?d.detail:[]).concat(e?e.detail:[]).concat(g?g.detail:[])};
+      var a=r1.map[k], b=r2.map[k], c=r3.map[k], d=r4.map[k], e=r5.map[k], g=r6.map[k], h=r7.map[k];
+      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name)||(d&&d.name)||(e&&e.name)||(g&&g.name)||(h&&h.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0)+(e?e.pts:0)+(g?g.pts:0)+(h?h.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0)+(d?d.hits:0)+(e?e.hits:0)+(g?g.hits:0)+(h?h.hits:0),
+              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[]).concat(d?d.detail:[]).concat(e?e.detail:[]).concat(g?g.detail:[]).concat(h?h.detail:[])};
     }).sort(function(a,b){ return b.pts-a.pts || a.name.localeCompare(b.name,"es"); });
 
-    var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length + r4.captured.length + r5.captured.length + r6.captured.length;
-    var totalQ = r1.total + r2.total + r3.total + r4.total + r5.total + r6.total;
+    var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length + r4.captured.length + r5.captured.length + r6.captured.length + r7.captured.length;
+    var totalQ = r1.total + r2.total + r3.total + r4.total + r5.total + r6.total + r7.total;
     document.getElementById("nplayers").textContent=players.length;
     document.getElementById("nres").textContent=totalCaptured;
     document.getElementById("ntot").textContent=totalQ;
@@ -786,6 +814,7 @@ function main(){
     renderResults(RESULTS_R3, SCORES_R3, SHORT_R3, NICE_R3, "rgrid3");
     renderResults(RESULTS_R4, SCORES_R4, SHORT_R4, NICE_R4, "rgrid4");
     renderResults(RESULTS_R5, SCORES_R5, SHORT_R5, NICE_R5, "rgrid5");
+    renderResults(RESULTS_R6, SCORES_R6, SHORT_R6, NICE_R6, "rgrid6");
   }).catch(function(e){
     document.getElementById("board").innerHTML='<div class="error">No pude cargar las respuestas. Recarga la página en unos segundos.</div>';
   });
