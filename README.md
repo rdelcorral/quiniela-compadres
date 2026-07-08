@@ -8,6 +8,7 @@ Sitio estático de la quiniela del Mundial 2026 entre compadres. Alojado en **Ve
 - **`tabla.html`** (`/tabla`) → tabla de posiciones. Lee las respuestas de los Google Forms (CSV), las califica contra los objetos `RESULTS` (Ronda 1) y `RESULTS_R2` (Ronda 2) incrustados, y **suma R1 + R2 por nombre del participante**. Tiene botón "🔄 Actualizar" (recalcula desde el CSV) y desglose de puntos al hacer clic en cada participante.
 - **`ronda2.html`** (`/ronda2`) → formulario de la **Ronda 2** (jornada 2 de grupos). Postea a un segundo Google Form.
 - **`ronda3.html`** (`/ronda3`) → formulario de la **Ronda 3** (jornada 3 de grupos): un solo enlace con los 24 partidos + especial de goleada. Postea a un Google Form único (creado con `APPS-SCRIPT-RONDA3.gs`). `tabla.html` suma R1+R2+R3.
+- **`doctor.html`** (`/doctor`) → **doctor del repo**: página de diagnóstico que responde en qué número de *exit* (eliminación) va el Mundial, cuál fue el último equipo eliminado y en qué folio (número de commits en `main`) va el repo. No guarda datos propios: lee los resultados de las llaves directas directo de `tabla.html` (objetos `RESULTS_R4+`) y el folio de la API pública de GitHub, así que se actualiza sola con cada captura.
 - **`vercel.json`** → `{ "cleanUrls": true }` (permite `/tabla`, `/ronda2` y `/ronda3` sin `.html`).
 
 ## Cómo se capturan los resultados
