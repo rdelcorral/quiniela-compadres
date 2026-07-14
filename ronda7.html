@@ -115,17 +115,17 @@ input:focus{outline:2px solid var(--green);border-color:var(--green)}
 /* ============================================================================
    CONFIGURACIÓN — llenar con la salida del script APPS-SCRIPT-RONDA7.gs y poner READY=true.
    ========================================================================== */
-const READY = false;
-const FORM_URL = "https://docs.google.com/forms/d/e/PENDIENTE/formResponse";
-const E_NOMBRE = "";   // entry ID del "Nombre completo"
+const READY = true;
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSemw7wKbWSw5xjiqCr3p9h0aWpwxn0I0ikY46ftNqhZrH-CgA/formResponse";
+const E_NOMBRE = "1901049091";   // entry ID del "Nombre completo"
 const DEADLINE = new Date("2026-07-16T06:00:00Z"); // abierta toda la ronda; validez por marca de tiempo (KICKOFF_R7 en tabla.html)
 
 const FLAG = {mx:"mx",cz:"cz",kr:"kr",za:"za",ca:"ca",ch:"ch",ba:"ba",qa:"qa",sct:"gb-sct",br:"br",ma:"ma",ht:"ht",tr:"tr",us:"us",py:"py",au:"au",de:"de",ec:"ec",ci:"ci",cw:"cw",nl:"nl",tn:"tn",se:"se",jp:"jp",nz:"nz",be:"be",eg:"eg",ir:"ir",uy:"uy",es:"es",cv:"cv",sa:"sa",no:"no",fr:"fr",sn:"sn",iq:"iq",jo:"jo",ar:"ar",dz:"dz",at:"at",co:"co",pt:"pt",cd:"cd",uz:"uz",pa:"pa",eng:"gb-eng",hr:"hr",gh:"gh"};
 function flag(code){return '<img src="https://flagcdn.com/w80/'+FLAG[code]+'.png" alt="" loading="lazy">';}
 
 const MATCHES = [
- {id:"S1", e:"", cap:"Mar 14 jul", a:{d:"España",v:"Espana",f:"es"},         b:{d:"Francia",v:"Francia",f:"fr"}},
- {id:"S2", e:"", cap:"Mié 15 jul", a:{d:"Argentina",v:"Argentina",f:"ar"},   b:{d:"Inglaterra",v:"Inglaterra",f:"eng"}}
+ {id:"S1", e:"1646258193", cap:"Mar 14 jul", a:{d:"España",v:"Espana",f:"es"},         b:{d:"Francia",v:"Francia",f:"fr"}},
+ {id:"S2", e:"188279025",  cap:"Mié 15 jul", a:{d:"Argentina",v:"Argentina",f:"ar"},   b:{d:"Inglaterra",v:"Inglaterra",f:"eng"}}
 ];
 
 const answers = {};
