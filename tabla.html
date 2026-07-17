@@ -98,8 +98,10 @@ h1 .gold{color:var(--gold)}
     <div class="rgrid" id="rgrid6"></div>
     <div class="rsub">🥇 Ronda 7 · Semifinales</div>
     <div class="rgrid" id="rgrid7"></div>
+    <div class="rsub">🏆 Ronda 8 · Final + 3er lugar</div>
+    <div class="rgrid" id="rgrid8"></div>
   </div>
-  <div class="foot">Suma Ronda 1 → 7 · se actualiza al abrir la página.<br><a href="/ronda7">🥇 Jugar la Ronda 7 (Semifinales)</a> · <a href="/">← Volver a la quiniela</a></div>
+  <div class="foot">Suma Ronda 1 → 8 · se actualiza al abrir la página.<br><a href="/ronda8">🏆 Jugar la Ronda 8 (Gran Final)</a> · <a href="/">← Volver a la quiniela</a></div>
 </div>
 
 <script>
@@ -531,6 +533,21 @@ var KICKOFF_R7 = {
   "Argentina vs Inglaterra": Date.UTC(2026,6,15,19,0)
 };
 
+// ===== RONDA 8 (Final + 3er lugar) — formato "quién gana" =====
+var CSV_URL_R8 = "https://docs.google.com/spreadsheets/d/1G7udHDPOPdgfQykjs03PoewCI9-m2Bm6jLJQEi_cg_I/gviz/tq?tqx=out:csv";
+var RESULTS_R8 = {
+  "Argentina vs Espana": null,
+  "Francia vs Inglaterra": null
+};
+var SCORES_R8 = {};
+var PTS_R8 = {"Argentina vs Espana":3,"Francia vs Inglaterra":3};
+var SHORT_R8 = {"Argentina vs Espana":"🏆 Final: Argentina vs España","Francia vs Inglaterra":"🥉 3er lugar: Francia vs Inglaterra"};
+var NICE_R8 = {"Espana":"España"};
+var KICKOFF_R8 = {
+  "Francia vs Inglaterra": Date.UTC(2026,6,18,21,0),
+  "Argentina vs Espana": Date.UTC(2026,6,19,19,0)
+};
+
 // Pronósticos capturados a mano para quien no alcanzó a enviar por el formulario.
 // Autorizado por el dueño; se sortearon al azar (no todos correctos) y cuentan a tiempo.
 // { "<Nombre>": { "<Ronda>": { "<clave partido>": "<pick>" } } }
@@ -763,10 +780,11 @@ function main(){
     getCSV(CSV_URL_R4).catch(function(){return null;}),
     getCSV(CSV_URL_R5).catch(function(){return null;}),
     getCSV(CSV_URL_R6).catch(function(){return null;}),
-    getCSV(CSV_URL_R7).catch(function(){return null;})
+    getCSV(CSV_URL_R7).catch(function(){return null;}),
+    getCSV(CSV_URL_R8).catch(function(){return null;})
   ]).then(function(res){
-    var rows1=res[0], rows2=res[1], rows3=res[2], rows4=res[3], rows5=res[4], rows6=res[5], rows7=res[6], rows8=res[7];
-    if(!rows1 && !rows2 && !rows3 && !rows4 && !rows5 && !rows6 && !rows7 && !rows8) throw new Error("sin datos");
+    var rows1=res[0], rows2=res[1], rows3=res[2], rows4=res[3], rows5=res[4], rows6=res[5], rows7=res[6], rows8=res[7], rows9=res[8];
+    if(!rows1 && !rows2 && !rows3 && !rows4 && !rows5 && !rows6 && !rows7 && !rows8 && !rows9) throw new Error("sin datos");
     var r1 = scoreRound(rows1, RESULTS, PTS, SHORT, NICE, SCORES);
     var r2 = scoreRound(rows2, RESULTS_R2, PTS_R2, SHORT_R2, NICE_R2, SCORES_R2);
     var r3 = scoreRound(rows3, RESULTS_R2C, PTS_R2C, SHORT_R2C, NICE_R2C, SCORES_R2C);
@@ -775,11 +793,13 @@ function main(){
     var r6 = scoreRound(rows6, RESULTS_R5, PTS_R5, SHORT_R5, NICE_R5, SCORES_R5, KICKOFF_R5);
     var r7 = scoreRound(rows7, RESULTS_R6, PTS_R6, SHORT_R6, NICE_R6, SCORES_R6, KICKOFF_R6);
     var r8 = scoreRound(rows8, RESULTS_R7, PTS_R7, SHORT_R7, NICE_R7, SCORES_R7, KICKOFF_R7);
+    var r9 = scoreRound(rows9, RESULTS_R8, PTS_R8, SHORT_R8, NICE_R8, SCORES_R8, KICKOFF_R8);
     // Inyecta pronósticos manuales (solo si el participante no envió esa ronda por el formulario).
     var ROUND_MAP = {R4:{r:r5,RES:RESULTS_R4,PTS:PTS_R4,SHORT:SHORT_R4,NICE:NICE_R4,SCORES:SCORES_R4},
                      R5:{r:r6,RES:RESULTS_R5,PTS:PTS_R5,SHORT:SHORT_R5,NICE:NICE_R5,SCORES:SCORES_R5},
                      R6:{r:r7,RES:RESULTS_R6,PTS:PTS_R6,SHORT:SHORT_R6,NICE:NICE_R6,SCORES:SCORES_R6},
-                     R7:{r:r8,RES:RESULTS_R7,PTS:PTS_R7,SHORT:SHORT_R7,NICE:NICE_R7,SCORES:SCORES_R7}};
+                     R7:{r:r8,RES:RESULTS_R7,PTS:PTS_R7,SHORT:SHORT_R7,NICE:NICE_R7,SCORES:SCORES_R7},
+                     R8:{r:r9,RES:RESULTS_R8,PTS:PTS_R8,SHORT:SHORT_R8,NICE:NICE_R8,SCORES:SCORES_R8}};
     Object.keys(MANUAL).forEach(function(nm){
       var ck = canonKey(nm);
       Object.keys(MANUAL[nm]).forEach(function(rk){
@@ -797,14 +817,15 @@ function main(){
     Object.keys(r6.map).forEach(function(k){names[k]=1;});
     Object.keys(r7.map).forEach(function(k){names[k]=1;});
     Object.keys(r8.map).forEach(function(k){names[k]=1;});
+    Object.keys(r9.map).forEach(function(k){names[k]=1;});
     var players = Object.keys(names).map(function(k){
-      var a=r1.map[k], b=r2.map[k], c=r3.map[k], d=r4.map[k], e=r5.map[k], g=r6.map[k], h=r7.map[k], j=r8.map[k];
-      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name)||(d&&d.name)||(e&&e.name)||(g&&g.name)||(h&&h.name)||(j&&j.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0)+(e?e.pts:0)+(g?g.pts:0)+(h?h.pts:0)+(j?j.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0)+(d?d.hits:0)+(e?e.hits:0)+(g?g.hits:0)+(h?h.hits:0)+(j?j.hits:0),
-              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[]).concat(d?d.detail:[]).concat(e?e.detail:[]).concat(g?g.detail:[]).concat(h?h.detail:[]).concat(j?j.detail:[])};
+      var a=r1.map[k], b=r2.map[k], c=r3.map[k], d=r4.map[k], e=r5.map[k], g=r6.map[k], h=r7.map[k], j=r8.map[k], l=r9.map[k];
+      return {name:(a&&a.name)||(b&&b.name)||(c&&c.name)||(d&&d.name)||(e&&e.name)||(g&&g.name)||(h&&h.name)||(j&&j.name)||(l&&l.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0)+(e?e.pts:0)+(g?g.pts:0)+(h?h.pts:0)+(j?j.pts:0)+(l?l.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0)+(d?d.hits:0)+(e?e.hits:0)+(g?g.hits:0)+(h?h.hits:0)+(j?j.hits:0)+(l?l.hits:0),
+              detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[]).concat(d?d.detail:[]).concat(e?e.detail:[]).concat(g?g.detail:[]).concat(h?h.detail:[]).concat(j?j.detail:[]).concat(l?l.detail:[])};
     }).sort(function(a,b){ return b.pts-a.pts || a.name.localeCompare(b.name,"es"); });
 
-    var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length + r4.captured.length + r5.captured.length + r6.captured.length + r7.captured.length + r8.captured.length;
-    var totalQ = r1.total + r2.total + r3.total + r4.total + r5.total + r6.total + r7.total + r8.total;
+    var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length + r4.captured.length + r5.captured.length + r6.captured.length + r7.captured.length + r8.captured.length + r9.captured.length;
+    var totalQ = r1.total + r2.total + r3.total + r4.total + r5.total + r6.total + r7.total + r8.total + r9.total;
     document.getElementById("nplayers").textContent=players.length;
     document.getElementById("nres").textContent=totalCaptured;
     document.getElementById("ntot").textContent=totalQ;
@@ -845,6 +866,7 @@ function main(){
     renderResults(RESULTS_R5, SCORES_R5, SHORT_R5, NICE_R5, "rgrid5");
     renderResults(RESULTS_R6, SCORES_R6, SHORT_R6, NICE_R6, "rgrid6");
     renderResults(RESULTS_R7, SCORES_R7, SHORT_R7, NICE_R7, "rgrid7");
+    renderResults(RESULTS_R8, SCORES_R8, SHORT_R8, NICE_R8, "rgrid8");
   }).catch(function(e){
     document.getElementById("board").innerHTML='<div class="error">No pude cargar las respuestas. Recarga la página en unos segundos.</div>';
   });
