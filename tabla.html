@@ -710,7 +710,7 @@ var NAME_FIX = {
 function canonName(name){ var n=norm(name); return NAME_FIX[n] || (name||"").trim(); }
 function canonKey(name){ return norm(canonName(name)); }
 // Participantes a excluir de la tabla (por clave canónica, sin acentos ni mayúsculas).
-var EXCLUDE = { "alfio": 1 };
+var EXCLUDE = { "alfio": 1, "alfio fitz": 1 };
 function isExcluded(name){ return !!EXCLUDE[canonKey(name)]; }
 
 // Muestra el resultado de un partido como "Local x-y Visitante" (en vez de "Ganador x-y", que se leía al revés).
