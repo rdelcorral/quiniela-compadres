@@ -701,10 +701,17 @@ var NAME_FIX = {
   "fernanda del corral": "Fernanda Del Corral",
   "fer del corral": "Fernanda Del Corral",
   "diego del corral garcia": "Diego Del Corral Garcia",
-  "diego dcg": "Diego Del Corral Garcia"
+  "diego del corral": "Diego Del Corral Garcia",
+  "diego dcg": "Diego Del Corral Garcia",
+  "jimena joya jimenez": "Jimena Joya Jimenez",
+  "jimena joya": "Jimena Joya Jimenez",
+  "jimenea joya": "Jimena Joya Jimenez"
 };
 function canonName(name){ var n=norm(name); return NAME_FIX[n] || (name||"").trim(); }
 function canonKey(name){ return norm(canonName(name)); }
+// Participantes a excluir de la tabla (por clave canónica, sin acentos ni mayúsculas).
+var EXCLUDE = { "alfio": 1 };
+function isExcluded(name){ return !!EXCLUDE[canonKey(name)]; }
 
 // Muestra el resultado de un partido como "Local x-y Visitante" (en vez de "Ganador x-y", que se leía al revés).
 function fmtResult(key, val, SCORES, NICE){
@@ -724,7 +731,7 @@ function scoreRound(rows, RES, PTS, SHORT, NICE, SCORES, KICKOFF){
   if(idxName<0) return out;
   rows.slice(1).forEach(function(r){
     var name=(r[idxName]||"").trim();
-    if(!name || norm(name).indexOf("prueba")>=0) return;
+    if(!name || norm(name).indexOf("prueba")>=0 || isExcluded(name)) return;
     var stamp = (KICKOFF && idxStamp>=0) ? parseStamp(r[idxStamp]) : null;
     var pts=0, hits=0, detail=[];
     out.captured.forEach(function(key){
