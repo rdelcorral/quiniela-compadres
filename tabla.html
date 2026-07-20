@@ -66,6 +66,24 @@ h1 .gold{color:var(--gold)}
 .refresh:active{transform:scale(.97)}
 .refresh:disabled{opacity:.55;cursor:default;box-shadow:none}
 .updated{text-align:center;color:var(--mut);font-size:11px;margin-top:7px;min-height:14px}
+.famwrap{margin-top:30px}
+.famwrap h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px}
+.famnote{font-size:12px;color:var(--mut);margin:4px 0 12px}
+.famrow{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:8px}
+.famrow.p1{border-color:rgba(255,213,79,.6);box-shadow:0 0 14px rgba(255,213,79,.12)}
+.fammain{display:flex;align-items:center;gap:12px}
+.famrow .pos{font-family:'Bebas Neue',sans-serif;font-size:22px;width:30px;text-align:center;color:var(--mut);flex:none}
+.famrow.p1 .pos{color:var(--gold)}
+.famrow.p2 .pos{color:#cfd8ea}
+.famrow.p3 .pos{color:#e0a36b}
+.famrow .femoji{font-size:22px;flex:none}
+.famrow .nm{flex:1;font-weight:800;font-size:15px}
+.famrow .det{font-size:11px;color:var(--mut);margin-top:2px;font-weight:400}
+.famrow .avg{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);text-align:right;line-height:1}
+.famrow .avg small{font-size:10px;color:var(--mut);font-family:'Inter',sans-serif;display:block;text-transform:uppercase;letter-spacing:1px}
+.fammembers{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;border-top:1px solid var(--line);padding-top:9px}
+.fammembers span{font-size:11px;color:var(--mut);background:#0a1736;border:1px solid var(--line);border-radius:99px;padding:4px 9px}
+.fammembers b{color:var(--green);font-weight:700}
 </style>
 </head>
 <body>
@@ -80,6 +98,11 @@ h1 .gold{color:var(--gold)}
     </div>
   </div>
   <div class="board" id="board"><div class="empty">Cargando pronósticos… ⏳</div></div>
+  <div class="famwrap" id="famwrap" style="display:none">
+    <h2>🏠 TABLA POR FAMILIA</h2>
+    <div class="famnote">Promedio = puntos totales de la familia ÷ número de integrantes</div>
+    <div id="famboard"></div>
+  </div>
   <div class="results">
     <h2>📋 RESULTADOS CAPTURADOS</h2>
     <div class="rsub">🥇 Ronda 1 · Fase de grupos</div>
@@ -775,6 +798,49 @@ function getCSV(url){
     .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
     .then(function(t){ return parseCSV(t); });
 }
+// ===== TABLA POR FAMILIA =====
+// Cada integrante es una lista de alias (por si aparece con variantes de nombre);
+// cuenta como UN integrante. Promedio = suma de puntos ÷ número de integrantes.
+var FAMILIES = [
+  {name:"Del Corral", emoji:"👑", members:[["Ernesto","Ernesto Del Corral"],["Rodrigo Del Corral"],["Paloma Garcia"],["Fernanda Del Corral"],["Diego Del Corral Garcia"]]},
+  {name:"Madero",     emoji:"⚽", members:[["René Madero"],["Sebastian Madero"],["Vale Madero"],["AnaPau Martinez"]]},
+  {name:"Favela",     emoji:"🔥", members:[["Elma Celis"],["Jorge Favela Zazueta"],["Jorge Favela"]]},
+  {name:"Jiménez",    emoji:"⭐", members:[["Nelly Fernanda Joya"],["Jimena Joya Jimenez"],["Nelly Jimenez"]]},
+  {name:"Ahumada",    emoji:"🎯", members:[["Nilda Zamudio"],["Pedro Ahumada"],["Pedro Ahumada Zamudio"]]}
+];
+function renderFamilies(ptsByKey){
+  var rows = FAMILIES.map(function(fam){
+    var total=0, det=[];
+    fam.members.forEach(function(aliases){
+      var pts=0;
+      for(var i=0;i<aliases.length;i++){ var k=canonKey(aliases[i]); if(ptsByKey[k]!=null){ pts=ptsByKey[k]; break; } }
+      total+=pts;
+      det.push({name:aliases[0], pts:pts});
+    });
+    return {name:fam.name, emoji:fam.emoji, total:total, count:fam.members.length, avg:total/fam.members.length, det:det};
+  }).sort(function(a,b){ return b.avg-a.avg || b.total-a.total; });
+
+  var medals=["🥇","🥈","🥉"], lastAvg=null, lastRank=0, html="";
+  rows.forEach(function(f,i){
+    var rank=(f.avg===lastAvg)?lastRank:i+1; lastAvg=f.avg; lastRank=rank;
+    var avgTxt = (Math.round(f.avg*10)/10).toString();
+    var chips = f.det.slice().sort(function(a,b){return b.pts-a.pts;}).map(function(m){
+      return '<span>'+m.name+' <b>'+m.pts+'</b></span>';
+    }).join('');
+    html += '<div class="famrow p'+rank+'">'
+      + '<div class="fammain">'
+      + '<div class="pos">'+rank+'</div>'
+      + '<div class="femoji">'+f.emoji+'</div>'
+      + '<div class="nm">Familia '+f.name+'<div class="det">'+f.count+' integrantes · '+f.total+' pts totales</div></div>'
+      + (rank<=3 ? '<div class="femoji">'+medals[rank-1]+'</div>' : '')
+      + '<div class="avg">'+avgTxt+'<small>prom</small></div>'
+      + '</div>'
+      + '<div class="fammembers">'+chips+'</div>'
+      + '</div>';
+  });
+  document.getElementById("famboard").innerHTML = html;
+  document.getElementById("famwrap").style.display = "block";
+}
 function renderResults(RES, SCORES, SHORT, NICE, gridId){
   var rhtml="";
   Object.keys(RES).forEach(function(k){
@@ -837,6 +903,13 @@ function main(){
       return {name:(a&&a.name)||(b&&b.name)||(c&&c.name)||(d&&d.name)||(e&&e.name)||(g&&g.name)||(h&&h.name)||(j&&j.name)||(l&&l.name), pts:(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0)+(e?e.pts:0)+(g?g.pts:0)+(h?h.pts:0)+(j?j.pts:0)+(l?l.pts:0), hits:(a?a.hits:0)+(b?b.hits:0)+(c?c.hits:0)+(d?d.hits:0)+(e?e.hits:0)+(g?g.hits:0)+(h?h.hits:0)+(j?j.hits:0)+(l?l.hits:0),
               detail:(a?a.detail:[]).concat(b?b.detail:[]).concat(c?c.detail:[]).concat(d?d.detail:[]).concat(e?e.detail:[]).concat(g?g.detail:[]).concat(h?h.detail:[]).concat(j?j.detail:[]).concat(l?l.detail:[])};
     }).sort(function(a,b){ return b.pts-a.pts || a.name.localeCompare(b.name,"es"); });
+
+    var ptsByKey = {};
+    Object.keys(names).forEach(function(k){
+      var a=r1.map[k],b=r2.map[k],c=r3.map[k],d=r4.map[k],e=r5.map[k],g=r6.map[k],h=r7.map[k],j=r8.map[k],l=r9.map[k];
+      ptsByKey[k]=(a?a.pts:0)+(b?b.pts:0)+(c?c.pts:0)+(d?d.pts:0)+(e?e.pts:0)+(g?g.pts:0)+(h?h.pts:0)+(j?j.pts:0)+(l?l.pts:0);
+    });
+    renderFamilies(ptsByKey);
 
     var totalCaptured = r1.captured.length + r2.captured.length + r3.captured.length + r4.captured.length + r5.captured.length + r6.captured.length + r7.captured.length + r8.captured.length + r9.captured.length;
     var totalQ = r1.total + r2.total + r3.total + r4.total + r5.total + r6.total + r7.total + r8.total + r9.total;
